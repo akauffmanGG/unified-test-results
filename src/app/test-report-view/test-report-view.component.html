@@ -1,0 +1,41 @@
+<div class="test-report-view">
+    <div class="row">
+        <div class="col-lg-2 sidebar">
+
+            <button
+                (click)="getTestReport()"
+                [disabled]="!qaSelected && !mainSelected"
+                class="btn btn-primary">
+                Get Test Results
+            </button>
+
+            <div *ngIf="testCaseResults && testCaseResults.length">
+                <h4>Filters</h4>
+                <p>
+                    <input [(ngModel)]="qaSelected" (change)="filterResults()" type="checkbox" id="qaCheckbox">
+                    <label for="qaCheckbox">QA</label>
+
+                    <input [(ngModel)]="mainSelected" (change)="filterResults()" type="checkbox" id="mainCheckbox">
+                    <label for="mainCheckbox">Main</label>
+                </p><p>
+                    <input [(ngModel)]="showOnlyFailures" (change)="filterResults()" type="checkbox" id="failuresCheckbox">
+                    <label for="failuresCheckbox">Show only failures</label>
+                </p><p>
+                    <input [(ngModel)]="showOnlyBothFailures" (change)="filterResults()" type="checkbox" id="failuresBothCheckbox">
+                    <label for="failuresBothCheckbox">Show only failures for both</label>
+                </p>
+                <p>
+                    <input [(ngModel)]="showOnlyConsistentFailures" (change)="filterResults()" type="checkbox" id="failuresConsistentCheckbox">
+                    <label for="failuresConsistentCheckbox">Show only consistent failures (>3)</label>
+                </p>
+            </div>
+
+        </div>
+        <div class="col-lg-10 main">
+            <p *ngIf="testCaseResults && testCaseResults.length">
+              <test-report-table [testCaseResults] = "rows"></test-report-table>
+            </p>
+
+        </div>
+    </div>
+</div>

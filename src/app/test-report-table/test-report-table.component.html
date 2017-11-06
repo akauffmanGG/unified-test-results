@@ -1,0 +1,58 @@
+<div class="test-report-table-component">
+
+    <ngx-datatable
+        class="material"
+        [rows] = "rows"
+        [columns] = "columns"
+        [footerHeight]="50"
+        [scrollbarV]="true"
+        [scrollbarH]="true"
+        columnMode="force">
+
+        <ngx-datatable-column name="Test Case" prop="displayName">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <a href="http://tcdb.inin.com/phaster/#/testcases/{{row.caseNumber}}" target="_blank">{{value}}</a>
+             </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+            name="QA Status"
+            prop="qaStatus"
+            [cellClass]="statusCellClass">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="QA Age" prop="qaAge"></ngx-datatable-column>
+
+        <ngx-datatable-column
+            name="Main Status"
+            prop="mainStatus"
+            [cellClass]="statusCellClass">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Main Age" prop="mainAge"></ngx-datatable-column>
+        <ngx-datatable-column name="Team"></ngx-datatable-column>
+        <ngx-datatable-column name="SCR" prop="jiraIssue" [cellClass]="scrCellClass" [comparator]="scrComparator">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <a *ngIf="value" href="https://devjira.inin.com/browse/{{value.key}}" target="_blank">{{value.key}}</a>
+
+                <button
+                    *ngIf="row.needsJiraIssue"
+                    class="btn-xs btn-primary"
+                    (click)="createScr(row)">
+                        Create SCR
+                </button>
+             </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+             <ng-template
+               ngx-datatable-footer-template
+               let-rowCount="rowCount">
+               <div style="padding: 5px 10px">
+                   Rows: {{rowCount}}
+               </div>
+             </ng-template>
+           </ngx-datatable-footer>
+    </ngx-datatable>
+
+</div>

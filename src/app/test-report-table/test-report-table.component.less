@@ -1,0 +1,45 @@
+@import "../../../node_modules/bootstrap/less/variables.less";
+
+@hover-color: #485563;
+
+.test-report-table-component {
+
+    ::ng-deep .ngx-datatable.material {
+        background: none;
+        height: 90vh;
+
+        .datatable-row-group:hover {
+            background-color: @hover-color;
+            .datatable-body-cell.status-failed {
+                opacity: .65;
+            }
+        }
+
+        .datatable-row-odd {
+            background-color: #4e5d6c;
+        }
+
+        .datatable-row-even {
+            background-color: #3e4d5c;
+        }
+
+        .datatable-body-row {
+            .datatable-body-cell.status-failed {
+                background-color: @brand-danger;
+            }
+        }
+
+        .datatable-body-cell,
+        .datatable-header-cell,
+        .datatable-footer,
+        a {
+            color: @gray-lighter;
+        }
+
+        .needs-scr {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+    }
+
+}
