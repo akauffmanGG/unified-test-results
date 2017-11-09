@@ -66,8 +66,6 @@ export class JiraService {
             description += 'Main'
         }
 
-
-
         return {
             fields: {
                 project:
@@ -82,9 +80,15 @@ export class JiraService {
                 versions: [{
                     name: "main" //TODO: replace with correct version when qa failure
                 }],
+                fixVersions: [{
+                    name: "main"
+                }],
                 components: [{
                     name: "E2E Tests"
                 }],
+                priority: {
+                    name: "P3"
+                },
                 //Found in Branch
                 customfield_11990: {
                     value: "Systest"
