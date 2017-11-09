@@ -23,6 +23,23 @@
             background-color: #3e4d5c;
         }
 
+        .datatable-row-detail {
+            background-color: #2e3d4c;
+
+            .stacktrace-row {
+                display: flex;
+                flex-direction: row;
+
+                .stacktrace-message {
+                    flex: 0 1 auto;
+                    white-space: normal;
+                    min-width: 0px;
+                    font-family: monospace;
+                    padding-right: 30px
+                }
+            }
+        }
+
         .datatable-body-row {
             .datatable-body-cell.status-failed {
                 background-color: @brand-danger;

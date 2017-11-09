@@ -162,13 +162,8 @@ export class TestReportViewComponent implements OnInit {
                 let mainResult: TestCaseResult = mainResultMap[mergedResult.className];
                 let qaResult: TestCaseResult = qaResultMap[mergedResult.className];
 
-                mergedResult.mainAge = mainResult.mainAge;
-                mergedResult.mainStatus = mainResult.mainStatus;
-                mergedResult.mainFailedSince = mainResult.qaFailedSince;
-
-                mergedResult.qaAge = qaResult.qaAge;
-                mergedResult.qaStatus = qaResult.qaStatus;
-                mergedResult.qaFailedSince = qaResult.qaFailedSince;
+                mergedResult.merge(mainResult);
+                mergedResult.merge(qaResult);
             }
         });
 

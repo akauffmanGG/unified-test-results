@@ -6,6 +6,7 @@ export default class JenkinsTestCase {
     status: string;
     suite: string;
     case: string;
+    errorStackTrace: string;
 
     constructor(obj: any) {
         this.age = obj.age;
@@ -13,6 +14,7 @@ export default class JenkinsTestCase {
         this.failedSince = obj.failedSince;
         this.name = obj.name;
         this.status = obj.status;
+        this.errorStackTrace = obj.errorStackTrace;
 
         let classNameParts: string[] = this.className.split('.');
         //The suite and test case are always the last two parts of the class name.

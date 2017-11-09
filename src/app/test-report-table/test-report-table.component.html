@@ -1,16 +1,31 @@
 <div class="test-report-table-component">
 
     <ngx-datatable
-        class="material"
+        #testReportTable
+        class="material expandable"
         [rows] = "rows"
         [columns] = "columns"
         [footerHeight]="50"
         [scrollbarV]="true"
         [scrollbarH]="true"
-        columnMode="force">
+        columnMode="force"
+        (activate)="onActivate($event)">
+
+        <ngx-datatable-row-detail [rowHeight]="100">
+            <ng-template let-row="row"  ngx-datatable-row-detail-template>
+                <div class="stacktrace-row">
+                    <div class="stacktrace-message">
+                        {{row.qaStackTraceMessage}}
+                    </div>
+                    <div class="stacktrace-message">
+                        {{row.mainStackTraceMessage}}
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
 
         <ngx-datatable-column name="Test Case" prop="displayName">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
                 <a href="http://tcdb.inin.com/phaster/#/testcases/{{row.caseNumber}}" target="_blank">{{value}}</a>
              </ng-template>
         </ngx-datatable-column>

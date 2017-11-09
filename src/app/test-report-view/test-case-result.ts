@@ -14,9 +14,12 @@ export default class TestCaseResult {
     case: string;
     team: string;
 
+    //TODO: Factor into separate class
     qaAge: number;
     qaFailedSince: number;
     qaStatus: string;
+    qaStackTrace: string;
+    qaStackTraceMessage: string;
     get qaFailed(): boolean {
         return this.qaStatus === 'FAILED';
     }
@@ -24,6 +27,8 @@ export default class TestCaseResult {
     mainAge: number;
     mainFailedSince: number;
     mainStatus: string;
+    mainStackTrace: string;
+    mainStackTraceMessage: string;
     get mainFailed(): boolean {
         return this.mainStatus === 'FAILED';
     }
@@ -67,10 +72,14 @@ export default class TestCaseResult {
             this.qaAge = testCase.age;
             this.qaFailedSince = testCase.failedSince;
             this.qaStatus = testCase.status;
+            this.qaStackTrace = testCase.errorStackTrace;
+            this.qaStackTraceMessage = this.getStackTraceMessage(testCase.errorStackTrace);
         } else if (job == JenkinsJob.MAIN){
             this.mainAge = testCase.age;
             this.mainFailedSince = testCase.failedSince;
             this.mainStatus = testCase.status;
+            this.mainStackTrace = testCase.errorStackTrace;
+            this.mainStackTraceMessage = this.getStackTraceMessage(testCase.errorStackTrace);
         } else {
             console.error('Invalid Jenkins Job');
         }
@@ -82,5 +91,33 @@ export default class TestCaseResult {
         if(this.mainStatus == 'REGRESSION') {
             this.mainStatus = 'FAILED';
         }
+    }
+
+    private getStackTraceMessage(stackTrace: string): string {
+        if(!stackTrace || stackTrace.length === 0) {
+            return;
+        }
+
+        let message = stackTrace.split('+++')[0];
+        message = message
+            .replace(/\n/g, '')
+            .replace(/\s{2,}/g,'')
+            .replace('MESSAGE:ININ.Testing.Automation.Core.TraceTrueException :', '')
+            .replace('MESSAGE:ININ.Testing.Automation.ManagedICWS.NegativeICWSResponseException :', '');
+
+        return message;
+    }
+
+    merge(other: TestCaseResult) {
+        this.qaAge = this.qaAge || other.qaAge;
+        this.qaFailedSince = this.qaFailedSince || other.qaFailedSince;
+        this.qaStatus = this.qaStatus || other.qaStatus;
+        this.qaStackTrace = this.qaStackTrace || other.qaStackTrace;
+        this.qaStackTraceMessage = this.qaStackTraceMessage || other.qaStackTraceMessage;
+
+        this.mainAge = this.mainAge || other.mainAge;
+        this.mainFailedSince = this.mainFailedSince || other.mainFailedSince;
+        this.mainStatus = this.mainStatus || other.mainStatus;
+        this.mainStackTraceMessage = this.mainStackTraceMessage || other.mainStackTraceMessage;
     }
 }

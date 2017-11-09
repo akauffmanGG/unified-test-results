@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import TestCaseResult from '../test-report-view/test-case-result';
 import { JiraService } from '../jira/jira.service';
 import { JiraIssue } from '../jira/jira-issue';
@@ -11,6 +11,8 @@ import * as _ from 'lodash';
     providers: [JiraService]
 })
 export class TestReportTableComponent implements OnInit {
+    @ViewChild('testReportTable') table: any;
+
     private _testCaseResults: TestCaseResult[];
 
     @Input()
@@ -83,5 +85,13 @@ export class TestReportTableComponent implements OnInit {
                 return;
             });
     }
+
+    onActivate(event) {
+        if(event.type === 'click' && event.value === 'FAILED') {
+            this.table.rowDetail.toggleExpandRow(event.row);
+        }
+
+    }
+
 
 }
