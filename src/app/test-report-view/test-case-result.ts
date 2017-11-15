@@ -34,6 +34,7 @@ export default class TestCaseResult {
     }
 
     jiraIssue: JiraIssue;
+    isCreatingJiraIssue: boolean;
 
     get displayName(): string {
         return this.suite + ' ' + this.case;
@@ -56,7 +57,7 @@ export default class TestCaseResult {
     }
 
     get needsJiraIssue(): boolean {
-        return !this.jiraIssue && this.isConsistentlyFailing;
+        return !this.jiraIssue && this.isConsistentlyFailing && !this.isCreatingJiraIssue;
     }
 
     constructor(testCase: JenkinsTestCase, job: JenkinsJob) {

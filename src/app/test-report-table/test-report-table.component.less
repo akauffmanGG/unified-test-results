@@ -4,6 +4,35 @@
 
 .test-report-table-component {
 
+    ::ng-deep ngx-loading {
+        .backdrop {
+            position: inherit;
+        }
+
+        .spinner-three-bounce {
+            position: inherit;
+            line-height: 1;
+
+            .bounce1 {
+                background-color: @brand-info !important;
+                height: 10px;
+                width: 10px;
+            }
+
+            .bounce2 {
+                background-color: @brand-success !important;
+                height: 10px;
+                width: 10px;
+            }
+
+            .bounce3 {
+                background-color: @brand-primary !important;
+                height: 10px;
+                width: 10px;
+            }
+        }
+    }
+
     ::ng-deep .ngx-datatable.material {
         background: none;
         height: 90vh;

@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule }    from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { LoadingModule } from 'ngx-loading';
 
 import { AppComponent } from './app.component';
 import { TestReportTableComponent } from './test-report-table/test-report-table.component';
@@ -20,7 +21,8 @@ import { TestReportViewComponent } from './test-report-view/test-report-view.com
     HttpModule,
     HttpClientModule,
     FormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    LoadingModule
   ],
 
   providers: [],

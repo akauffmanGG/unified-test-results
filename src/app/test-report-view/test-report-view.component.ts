@@ -28,6 +28,7 @@ export class TestReportViewComponent implements OnInit {
     showOnlyFailures: boolean = true;
     showOnlyBothFailures: boolean = false;
     showOnlyConsistentFailures: boolean = false;
+    loading: boolean = false;
 
     constructor(private jenkinsService: JenkinsService, private jiraService: JiraService) {
     }
@@ -36,6 +37,7 @@ export class TestReportViewComponent implements OnInit {
     }
 
     getTestReport(): void {
+        this.loading = true;
         this.jenkinsService.getLatestTestReport(JenkinsJob.QA).then(testReport => {
             return _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJob.QA));
         }).then((qaResults: TestCaseResult[]) => {
@@ -48,6 +50,9 @@ export class TestReportViewComponent implements OnInit {
             this.filterResults();
 
             return this.addJiraIssues();
+        }).then(() => { this.loading = false; }) //Ugh, no finally block. Seriously?
+        .catch(() => {
+            this.loading = false;
         });
     }
 

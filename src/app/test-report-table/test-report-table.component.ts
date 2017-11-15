@@ -79,11 +79,13 @@ export class TestReportTableComponent implements OnInit {
     }
 
     createScr(row: TestCaseResult): void {
+        row.isCreatingJiraIssue = true;
         this.jiraService.postNewIssue(row.suite, row.case, row.isQaConsistentlyFailing, row.isMainConsistentlyFailing)
             .then((issue: JiraIssue) => {
                 row.jiraIssue = issue;
                 return;
-            });
+            }).then(() => { row.isCreatingJiraIssue = false; })
+            .catch(() => { row.isCreatingJiraIssue = false; });
     }
 
     onActivate(event) {

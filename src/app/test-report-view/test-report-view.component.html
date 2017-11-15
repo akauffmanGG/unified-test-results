@@ -1,3 +1,5 @@
+<ngx-loading [show]="loading"></ngx-loading>
+
 <div class="test-report-view">
     <div class="row">
         <div class="col-lg-2 sidebar">
@@ -9,7 +11,7 @@
                 Get Test Results
             </button>
 
-            <div *ngIf="testCaseResults && testCaseResults.length">
+            <div *ngIf="testCaseResults && testCaseResults.length && !loading">
                 <h4>Filters</h4>
                 <p>
                     <input [(ngModel)]="qaSelected" (change)="filterResults()" type="checkbox" id="qaCheckbox">
@@ -29,12 +31,12 @@
                     <label for="failuresConsistentCheckbox">Show only consistent failures (>3)</label>
                 </p>
             </div>
-
         </div>
         <div class="col-lg-10 main">
-            <p *ngIf="testCaseResults && testCaseResults.length">
+            <p *ngIf="testCaseResults && testCaseResults.length && !loading">
               <test-report-table [testCaseResults] = "rows"></test-report-table>
             </p>
+
 
         </div>
     </div>

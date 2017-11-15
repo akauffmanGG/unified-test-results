@@ -1,2 +1,18 @@
+@import "../../../node_modules/bootstrap/less/variables.less";
 .test-report-view {
+}
+
+//TODO: Extract into common less file
+::ng-deep .spinner-three-bounce {
+    .bounce1 {
+        background-color: @brand-info !important;
+    }
+
+    .bounce2 {
+        background-color: @brand-success !important;
+    }
+
+    .bounce3 {
+        background-color: @brand-primary !important;
+    }
 }
