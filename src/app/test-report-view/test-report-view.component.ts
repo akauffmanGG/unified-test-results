@@ -11,6 +11,7 @@ import { JiraIssue } from '../jira/jira-issue';
 
 import TestCaseResult from './test-case-result';
 import teamSuiteMap from './team-suite-map';
+import { MissingTeam } from './team';
 
 
 @Component({
@@ -177,7 +178,7 @@ export class TestReportViewComponent implements OnInit {
 
     private addTeamsToResults(): void {
         _.each(this.testCaseResults, (testCaseResult: TestCaseResult) => {
-            testCaseResult.team = teamSuiteMap.get(testCaseResult.suite) || 'None';
+            testCaseResult.team = teamSuiteMap.get(testCaseResult.suite) || MissingTeam;
         });
     }
 

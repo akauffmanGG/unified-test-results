@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JiraQuery } from './jira-query';
 import { JiraIssue } from './jira-issue';
 
+import TestCaseResult from '../test-report-view/test-case-result';
+
 @Injectable()
 export class JiraService {
 
@@ -26,11 +28,11 @@ export class JiraService {
         return Promise.reject(error.message || error);
     }
 
-    postNewIssue(testSuite: string, testCase: string, qaFails: boolean, mainFails: boolean): Promise<JiraIssue> {
+    postNewIssue(testCaseResult: TestCaseResult): Promise<JiraIssue> {
 
         let editObj = {
             fields: {
-                customfield_10073: testCase //Test Case Id
+                customfield_10073: testCaseResult.case //Test Case Id
             }
         }
 
@@ -39,7 +41,7 @@ export class JiraService {
         };
 
         let newIssueKey;
-        return this.http.post(JiraService.ISSUE_URL, this.createIssueObj(testSuite, testCase, qaFails, mainFails), authHeader).toPromise()
+        return this.http.post(JiraService.ISSUE_URL, this.createIssueObj(testCaseResult), authHeader).toPromise()
             .then((response: any) => {
                 console.log('Issue ' + response.key + ' created successfully');
                 newIssueKey = response.key;
@@ -55,14 +57,14 @@ export class JiraService {
 
     }
 
-    private createIssueObj(testSuite: string, testCase: string, qaFails: boolean, mainFails: boolean): any {
-        let description: string = `${testSuite} ${testCase} fails at `;
+    private createIssueObj(testCaseResult: TestCaseResult): any {
+        let description: string = `${testCaseResult.suite} ${testCaseResult.case} fails at `;
 
-        if(qaFails && mainFails) {
+        if(testCaseResult.isQaConsistentlyFailing && testCaseResult.isMainConsistentlyFailing) {
             description += 'Main and QA'
-        } else if(qaFails) {
+        } else if(testCaseResult.isQaConsistentlyFailing) {
             description += 'QA';
-        } else if(mainFails) {
+        } else if(testCaseResult.isMainConsistentlyFailing) {
             description += 'Main'
         }
 
@@ -94,7 +96,7 @@ export class JiraService {
                     value: "Systest"
                 },
                 //Development labels
-                customfield_10350: ["cart_issue", "consistent_failure"]
+                customfield_10350: ["cart_issue", "consistent_failure", testCaseResult.team.developmentLabel]
             }
         }
     }

@@ -45,7 +45,7 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Main Age" prop="mainAge"></ngx-datatable-column>
-        <ngx-datatable-column name="Team"></ngx-datatable-column>
+        <ngx-datatable-column name="Team" prop="team.displayName"></ngx-datatable-column>
         <ngx-datatable-column name="SCR" prop="jiraIssue" [cellClass]="scrCellClass" [comparator]="scrComparator">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <a *ngIf="value" href="https://devjira.inin.com/browse/{{value.key}}" target="_blank">{{value.key}}</a>

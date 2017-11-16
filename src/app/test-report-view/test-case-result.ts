@@ -3,6 +3,8 @@ import JenkinsJob from '../jenkins/jenkins-job';
 
 import { JiraIssue } from '../jira/jira-issue';
 
+import { Team, MissingTeam } from './team';
+
 const FAILED = 'FAILED';
 const REGRESSION = 'REGRESSION';
 const CONSISTENT_FAIL_NUMBER = 3;
@@ -12,7 +14,7 @@ export default class TestCaseResult {
     name: string;
     suite: string;
     case: string;
-    team: string;
+    team: Team;
 
     //TODO: Factor into separate class
     qaAge: number;
@@ -92,6 +94,8 @@ export default class TestCaseResult {
         if(this.mainStatus == 'REGRESSION') {
             this.mainStatus = 'FAILED';
         }
+
+        this.team = MissingTeam;
     }
 
     private getStackTraceMessage(stackTrace: string): string {
