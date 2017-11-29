@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { JenkinsService } from '../jenkins/jenkins.service';
 import { JiraService } from '../jira/jira.service';
+import { FilterResults } from './filter-results';
 
 import JenkinsTestReport from '../jenkins/jenkins-test-report';
 import JenkinsJob from '../jenkins/jenkins-job';
@@ -18,7 +19,7 @@ import { MissingTeam } from './team';
     selector: 'test-report-view',
     templateUrl: './test-report-view.component.html',
     styleUrls: ['./test-report-view.component.less'],
-    providers: [JenkinsService, JiraService]
+    providers: [JenkinsService, JiraService, FilterResults]
 })
 export class TestReportViewComponent implements OnInit {
 
@@ -29,9 +30,10 @@ export class TestReportViewComponent implements OnInit {
     showOnlyFailures: boolean = true;
     showOnlyBothFailures: boolean = false;
     showOnlyConsistentFailures: boolean = false;
+    showFixedIssues: boolean = false;
     loading: boolean = false;
 
-    constructor(private jenkinsService: JenkinsService, private jiraService: JiraService) {
+    constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private filterResults: FilterResults) {
     }
 
     ngOnInit() {
@@ -48,7 +50,7 @@ export class TestReportViewComponent implements OnInit {
             });
         }).then(() => {
             this.addTeamsToResults();
-            this.filterResults();
+            this.filterRows();
 
             return this.addJiraIssues();
         }).then(() => { this.loading = false; }) //Ugh, no finally block. Seriously?
@@ -57,79 +59,15 @@ export class TestReportViewComponent implements OnInit {
         });
     }
 
-    filterResults(): void {
-        this.rows = _.filter(this.testCaseResults, (result: TestCaseResult) => {
-            return this.isFilteredToBuild(result) &&
-                this.isFilteredToConsistentFailures(result) &&
-                this.isFilteredToOnlyFailures(result) &&
-                this.isFilteredToBothFailures(result);
-        });
-    }
+    filterRows(): void {
+        this.filterResults.showMain = this.mainSelected;
+        this.filterResults.showQa = this.qaSelected;
+        this.filterResults.showOnlyFailures = this.showOnlyFailures;
+        this.filterResults.showOnlyBothFailures = this.showOnlyBothFailures;
+        this.filterResults.showOnlyConsistentFailures = this.showOnlyConsistentFailures;
+        this.filterResults.showFixedIssues = this.showFixedIssues;
 
-    private isFilteredToBuild(result: TestCaseResult): boolean {
-        if(this.qaSelected && this.mainSelected){
-            return true;
-        }
-
-        if (!this.qaSelected && !result.mainStatus) {
-            return false;
-        }
-
-        if (!this.mainSelected && !result.qaStatus) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private isFilteredToOnlyFailures(result: TestCaseResult): boolean {
-        if(!this.showOnlyFailures) {
-            return true;
-        }
-
-        if (!result.qaFailed && !result.mainFailed) {
-            return false;
-        }
-
-        if (!result.qaFailed && !this.mainSelected) {
-            return false;
-        }
-        if (!result.mainFailed && !this.qaSelected) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private isFilteredToConsistentFailures(result: TestCaseResult): boolean {
-        if(!this.showOnlyConsistentFailures) {
-            return true;
-        }
-
-        if(!result.isConsistentlyFailing) {
-            return false;
-        }
-
-        if (!result.isQaConsistentlyFailing && !this.mainSelected) {
-            return false;
-        }
-        if (!result.isMainConsistentlyFailing && !this.qaSelected) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private isFilteredToBothFailures(result: TestCaseResult): boolean {
-        if(!this.showOnlyBothFailures) {
-            return true;
-        }
-
-        if (!result.qaFailed || !result.mainFailed) {
-            return false;
-        }
-
-        return true;
+        this.rows = this.filterResults.filter(this.testCaseResults);
     }
 
     private addJiraIssues(): Promise<any> {
