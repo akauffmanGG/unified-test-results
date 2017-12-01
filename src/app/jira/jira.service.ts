@@ -60,11 +60,11 @@ export class JiraService {
     private createIssueObj(testCaseResult: TestCaseResult): any {
         let description: string = `${testCaseResult.suite} ${testCaseResult.case} fails at `;
 
-        if(testCaseResult.isQaConsistentlyFailing && testCaseResult.isMainConsistentlyFailing) {
+        if(testCaseResult.qaResult.isConsistentlyFailing && testCaseResult.mainResult.isConsistentlyFailing) {
             description += 'Main and QA'
-        } else if(testCaseResult.isQaConsistentlyFailing) {
+        } else if(testCaseResult.qaResult.isConsistentlyFailing) {
             description += 'QA';
-        } else if(testCaseResult.isMainConsistentlyFailing) {
+        } else if(testCaseResult.mainResult.isConsistentlyFailing) {
             description += 'Main'
         }
 

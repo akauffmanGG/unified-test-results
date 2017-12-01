@@ -15,10 +15,10 @@
             <ng-template let-row="row"  ngx-datatable-row-detail-template>
                 <div class="stacktrace-row">
                     <div class="stacktrace-message">
-                        {{row.qaStackTraceMessage}}
+                        {{row.qaResult.stackTraceMessage}}
                     </div>
                     <div class="stacktrace-message">
-                        {{row.mainStackTraceMessage}}
+                        {{row.mainResult.stackTraceMessage}}
                     </div>
                 </div>
             </ng-template>
@@ -32,19 +32,19 @@
 
         <ngx-datatable-column
             name="QA Status"
-            prop="qaStatus"
+            prop="qaResult.status"
             [cellClass]="statusCellClass">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="QA Age" prop="qaAge"></ngx-datatable-column>
+        <ngx-datatable-column name="QA Age" prop="qaResult.age"></ngx-datatable-column>
 
         <ngx-datatable-column
             name="Main Status"
-            prop="mainStatus"
+            prop="mainResult.status"
             [cellClass]="statusCellClass">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Main Age" prop="mainAge"></ngx-datatable-column>
+        <ngx-datatable-column name="Main Age" prop="mainResult.age"></ngx-datatable-column>
         <ngx-datatable-column name="Team" prop="team.displayName"></ngx-datatable-column>
         <ngx-datatable-column name="SCR" prop="jiraIssue" [cellClass]="scrCellClass" [comparator]="scrComparator">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>

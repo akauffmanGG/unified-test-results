@@ -28,11 +28,11 @@ export class FilterResults {
             return true;
         }
 
-        if (!this.showQa && !result.mainStatus) {
+        if (!this.showQa && !result.mainResult.status) {
             return false;
         }
 
-        if (!this.showMain && !result.qaStatus) {
+        if (!this.showMain && !result.qaResult.status) {
             return false;
         }
 
@@ -44,14 +44,14 @@ export class FilterResults {
             return true;
         }
 
-        if (!result.qaFailed && !result.mainFailed) {
+        if (!result.qaResult.isFailure && !result.mainResult.isFailure) {
             return false;
         }
 
-        if (!result.qaFailed && !this.showMain) {
+        if (!result.qaResult.isFailure && !this.showMain) {
             return false;
         }
-        if (!result.mainFailed && !this.showQa) {
+        if (!result.mainResult.isFailure && !this.showQa) {
             return false;
         }
 
@@ -67,10 +67,10 @@ export class FilterResults {
             return false;
         }
 
-        if (!result.isQaConsistentlyFailing && !this.showMain) {
+        if (!result.qaResult.isConsistentlyFailing && !this.showMain) {
             return false;
         }
-        if (!result.isMainConsistentlyFailing && !this.showQa) {
+        if (!result.mainResult.isConsistentlyFailing && !this.showQa) {
             return false;
         }
 
@@ -82,7 +82,7 @@ export class FilterResults {
             return true;
         }
 
-        if (!result.qaFailed || !result.mainFailed) {
+        if (!result.qaResult.isFailure || !result.mainResult.isFailure) {
             return false;
         }
 
@@ -94,15 +94,15 @@ export class FilterResults {
             return true;
         }
 
-        if(!result.jiraIssue || (result.qaFailed && result.mainFailed)) {
+        if(!result.jiraIssue || (result.qaResult.isFailure && result.mainResult.isFailure)) {
             return false;
         }
 
-        if(!result.qaFailed && !result.mainFailed) {
+        if(!result.qaResult.isFailure && !result.mainResult.isFailure) {
             return true;
         }
 
-        if((result.mainFailed && !this.showMain) || (result.qaFailed && !this.showQa)) {
+        if((result.mainResult.isFailure && !this.showMain) || (result.qaResult.isFailure && !this.showQa)) {
             return true;
         }
 
