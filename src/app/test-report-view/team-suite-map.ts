@@ -69,6 +69,7 @@ const teamSuiteMap = new Map([
     , ['TS3995', PeachPuffTeam]
     , ['TS4103', PeachPuffTeam]
     , ['TS4098', PeachPuffTeam]
+    , ['TS4127', PeachPuffTeam]
 ]);
 
 export default teamSuiteMap;
