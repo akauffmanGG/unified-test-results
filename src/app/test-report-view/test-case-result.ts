@@ -1,5 +1,5 @@
 import JenkinsTestCase from '../jenkins/jenkins-test-case';
-import JenkinsJob from '../jenkins/jenkins-job';
+import JenkinsJobEnum from '../jenkins/jenkins-job-enum';
 
 import { JiraIssue } from '../jira/jira-issue';
 
@@ -36,7 +36,7 @@ export default class TestCaseResult {
         return !this.jiraIssue && this.isConsistentlyFailing && !this.isCreatingJiraIssue;
     }
 
-    constructor(testCase: JenkinsTestCase, job: JenkinsJob) {
+    constructor(testCase: JenkinsTestCase, job: JenkinsJobEnum) {
 
         this.className = testCase.className;
 
@@ -45,10 +45,10 @@ export default class TestCaseResult {
         this.suite = testCase.suite;
         this.case = testCase.case;
 
-        if(job === JenkinsJob.QA) {
+        if(job === JenkinsJobEnum.QA) {
             this.qaResult = new TestCaseJobResult(testCase);
             this.mainResult = new TestCaseJobResult({});
-        } else if (job === JenkinsJob.MAIN){
+        } else if (job === JenkinsJobEnum.MAIN){
             this.mainResult = new TestCaseJobResult(testCase);
             this.qaResult = new TestCaseJobResult({});
         } else {

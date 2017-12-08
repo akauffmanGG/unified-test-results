@@ -5,9 +5,10 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
+import { JenkinsJob } from './jenkins-job';
 import { JenkinsBuild } from './jenkins-build';
 import JenkinsTestReport from './jenkins-test-report';
-import JenkinsJob from './jenkins-job';
+import JenkinsJobEnum from './jenkins-job-enum';
 
 @Injectable()
 export class JenkinsService {
@@ -18,11 +19,19 @@ export class JenkinsService {
 
     constructor(private http: Http) { };
 
-    getLastCompletedBuild(job: JenkinsJob): Promise<JenkinsBuild> {
+    getMainJob(): Promise<JenkinsJob> {
+        return this.getJenkinsJob(JenkinsJobEnum.MAIN);
+    }
+
+    getQaJob(): Promise<JenkinsJob> {
+        return this.getJenkinsJob(JenkinsJobEnum.QA);
+    }
+
+    getJenkinsJob(job: JenkinsJobEnum): Promise<JenkinsJob> {
         let url = '';
-        if(job === JenkinsJob.MAIN) {
+        if(job === JenkinsJobEnum.MAIN) {
             url = JenkinsService.MAIN_BUILD_URL;
-        } else if (job == JenkinsJob.QA) {
+        } else if (job == JenkinsJobEnum.QA) {
             url = JenkinsService.QA_BUILD_URL;
         } else {
             console.error('Invalid job parameter');
@@ -33,7 +42,7 @@ export class JenkinsService {
             .toPromise()
             .then(response => {
                 console.log('Get Latest Completed Build completed with status ' + response.status);
-                return new JenkinsBuild(response.json().lastCompletedBuild);
+                return new JenkinsJob(response.json());
             }).catch(this.handleError);
     };
 
@@ -46,11 +55,11 @@ export class JenkinsService {
             }).catch(this.handleError);
     }
 
-    getLatestTestReport(job: JenkinsJob): Promise<JenkinsTestReport> {
+    getLatestTestReport(job: JenkinsJobEnum): Promise<JenkinsTestReport> {
         let url = '';
-        if(job === JenkinsJob.MAIN) {
+        if(job === JenkinsJobEnum.MAIN) {
             url = JenkinsService.MAIN_LAST_COMPLETED_TEST_REPORT_URL;
-        } else if (job == JenkinsJob.QA) {
+        } else if (job == JenkinsJobEnum.QA) {
             url = JenkinsService.QA_LAST_COMPLETED_TEST_REPORT_URL;
         } else {
             console.error('Invalid job parameter');

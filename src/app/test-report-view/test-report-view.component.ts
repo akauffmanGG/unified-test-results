@@ -1,16 +1,18 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { JenkinsService } from '../jenkins/jenkins.service';
 import { JiraService } from '../jira/jira.service';
 import { FilterResults } from './filter-results';
 
 import JenkinsTestReport from '../jenkins/jenkins-test-report';
-import JenkinsJob from '../jenkins/jenkins-job';
+import JenkinsJobEnum from '../jenkins/jenkins-job-enum';
+import { JenkinsJob } from '../jenkins/jenkins-job';
 
 import { JiraQuery } from '../jira/jira-query';
 import { JiraIssue } from '../jira/jira-issue';
 
 import TestCaseResult from './test-case-result';
+import { TestReport } from './test-report';
 import teamSuiteMap from './team-suite-map';
 import { MissingTeam } from './team';
 
@@ -24,7 +26,7 @@ import { MissingTeam } from './team';
 export class TestReportViewComponent implements OnInit {
 
     testCaseResults: TestCaseResult[];
-    rows: TestCaseResult[];
+    testReport: TestReport;
     qaSelected: boolean = true;
     mainSelected: boolean = true;
     showOnlyFailures: boolean = true;
@@ -41,11 +43,13 @@ export class TestReportViewComponent implements OnInit {
 
     getTestReport(): void {
         this.loading = true;
-        this.jenkinsService.getLatestTestReport(JenkinsJob.QA).then(testReport => {
-            return _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJob.QA));
+        this.testReport = new TestReport();
+
+        this.jenkinsService.getLatestTestReport(JenkinsJobEnum.QA).then(testReport => {
+            return _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.QA));
         }).then((qaResults: TestCaseResult[]) => {
-            return this.jenkinsService.getLatestTestReport(JenkinsJob.MAIN).then(testReport => {
-                let mainResults: TestCaseResult[] = _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJob.MAIN));
+            return this.jenkinsService.getLatestTestReport(JenkinsJobEnum.MAIN).then(testReport => {
+                let mainResults: TestCaseResult[] = _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.MAIN));
                 this.testCaseResults = this.mergeResults(qaResults, mainResults);
             });
         }).then(() => {
@@ -57,6 +61,8 @@ export class TestReportViewComponent implements OnInit {
         .catch(() => {
             this.loading = false;
         });
+
+        this.setJobTrends();
     }
 
     filterRows(): void {
@@ -67,7 +73,7 @@ export class TestReportViewComponent implements OnInit {
         this.filterResults.showOnlyConsistentFailures = this.showOnlyConsistentFailures;
         this.filterResults.showFixedIssues = this.showFixedIssues;
 
-        this.rows = this.filterResults.filter(this.testCaseResults);
+        this.testReport.testCaseResults = this.filterResults.filter(this.testCaseResults);
     }
 
     private addJiraIssues(): Promise<any> {
@@ -117,6 +123,25 @@ export class TestReportViewComponent implements OnInit {
     private addTeamsToResults(): void {
         _.each(this.testCaseResults, (testCaseResult: TestCaseResult) => {
             testCaseResult.team = teamSuiteMap.get(testCaseResult.suite) || MissingTeam;
+        });
+    }
+
+    private setJobTrends(): void {
+        this.testReport.qaSuccessTrend = 0;
+        this.testReport.qaFailTrend = 0;
+        this.testReport.mainSuccessTrend = 0;
+        this.testReport.mainFailTrend = 0;
+
+        this.jenkinsService.getMainJob()
+        .then((mainJob: JenkinsJob) => {
+            this.testReport.mainSuccessTrend = mainJob.lastCompletedBuild.number - mainJob.lastUnsuccessfulBuild.number;
+            this.testReport.mainFailTrend = mainJob.lastCompletedBuild.number - mainJob.lastSuccessfulBuild.number;
+        });
+
+        this.jenkinsService.getQaJob()
+        .then((qaJob: JenkinsJob) => {
+            this.testReport.qaSuccessTrend = qaJob.lastCompletedBuild.number - qaJob.lastUnsuccessfulBuild.number;
+            this.testReport.qaFailTrend = qaJob.lastCompletedBuild.number - qaJob.lastSuccessfulBuild.number;
         });
     }
 

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { TestReport } from '../test-report-view/test-report';
 import TestCaseResult from '../test-report-view/test-case-result';
 import { JiraService } from '../jira/jira.service';
 import { JiraIssue } from '../jira/jira-issue';
@@ -13,19 +14,9 @@ import * as _ from 'lodash';
 export class TestReportTableComponent implements OnInit {
     @ViewChild('testReportTable') table: any;
 
-    private _testCaseResults: TestCaseResult[];
-
     @Input()
-    set testCaseResults(newValue: TestCaseResult[]) {
-        this._testCaseResults = newValue;
-        this.rows = this._testCaseResults;
-    };
+    testReport: TestReport;
 
-    get testCaseResults(): TestCaseResult[] {
-        return this._testCaseResults;
-    }
-
-    showOnlyFailures: boolean = true;
     rows: TestCaseResult[];
 
     columns: any[] = [

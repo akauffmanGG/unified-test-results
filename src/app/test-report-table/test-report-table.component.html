@@ -3,7 +3,7 @@
     <ngx-datatable
         #testReportTable
         class="material expandable"
-        [rows] = "rows"
+        [rows] = "testReport.testCaseResults"
         [columns] = "columns"
         [footerHeight]="50"
         [scrollbarV]="true"
@@ -70,9 +70,17 @@
                </div>
                <div style="padding: 5px 10px">
                    <a href="http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/cic_regression/lastSuccessfulBuild/testReport" target="_blank">QA Results</a>
+                   (
+                    <span *ngIf="testReport.qaSuccessTrend" class="success-trend">+{{testReport.qaSuccessTrend}}</span>
+                    <span *ngIf="testReport.qaFailTrend" class="fail-trend">-{{testReport.qaFailTrend}}</span>
+                   )
                </div>
                <div style="padding: 5px 10px">
                    <a href="http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/main_regression/lastSuccessfulBuild/testReport" target="_blank">Main Results</a>
+                   (
+                       <span *ngIf="testReport.mainSuccessTrend" class="success-trend">+{{testReport.mainSuccessTrend}}</span>
+                       <span *ngIf="testReport.mainFailTrend" class="fail-trend">-{{testReport.mainFailTrend}}</span>
+                   )
                </div>
              </ng-template>
            </ngx-datatable-footer>
