@@ -12,10 +12,10 @@ import JenkinsJobEnum from './jenkins-job-enum';
 
 @Injectable()
 export class JenkinsService {
-    private static readonly QA_BUILD_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/cic_regression/api/json';
-    private static readonly QA_LAST_COMPLETED_TEST_REPORT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/cic_regression/lastSuccessfulBuild/testReport/api/json';
-    private static readonly MAIN_BUILD_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/main_regression/api/json';
-    private static readonly MAIN_LAST_COMPLETED_TEST_REPORT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/main_regression/lastSuccessfulBuild/testReport/api/json';
+    private static readonly QA_BUILD_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression/api/json';
+    private static readonly QA_LAST_COMPLETED_TEST_REPORT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression/lastSuccessfulBuild/testReport/api/json';
+    private static readonly MAIN_BUILD_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_main_regression/api/json';
+    private static readonly MAIN_LAST_COMPLETED_TEST_REPORT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_main_regression/lastSuccessfulBuild/testReport/api/json';
 
     constructor(private http: Http) { };
 
