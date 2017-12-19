@@ -69,14 +69,14 @@
                    Rows: {{rowCount}}
                </div>
                <div style="padding: 5px 10px">
-                   <a href="http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/cic_regression/lastSuccessfulBuild/testReport" target="_blank">QA Results</a>
+                   <a href="{{testReport.qaReportUrl}}" target="_blank">QA Results</a>
                    (
                     <span *ngIf="testReport.qaSuccessTrend" class="success-trend">+{{testReport.qaSuccessTrend}}</span>
                     <span *ngIf="testReport.qaFailTrend" class="fail-trend">-{{testReport.qaFailTrend}}</span>
                    )
                </div>
                <div style="padding: 5px 10px">
-                   <a href="http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/main_regression/lastSuccessfulBuild/testReport" target="_blank">Main Results</a>
+                   <a href="{{testReport.mainReportUrl}}" target="_blank">Main Results</a>
                    (
                        <span *ngIf="testReport.mainSuccessTrend" class="success-trend">+{{testReport.mainSuccessTrend}}</span>
                        <span *ngIf="testReport.mainFailTrend" class="fail-trend">-{{testReport.mainFailTrend}}</span>

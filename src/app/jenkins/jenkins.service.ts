@@ -10,12 +10,19 @@ import { JenkinsBuild } from './jenkins-build';
 import JenkinsTestReport from './jenkins-test-report';
 import JenkinsJobEnum from './jenkins-job-enum';
 
+const QA_BASE_URL:string = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression';
+const MAIN_BASE_URL:string = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_main_regression';
+const JSON_API:string = '/api/json';
+const LAST_SUCCESSFUL_ROUTE:string = '/lastSuccessfulBuild/testReport';
+
 @Injectable()
 export class JenkinsService {
-    private static readonly QA_BUILD_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression/api/json';
-    private static readonly QA_LAST_COMPLETED_TEST_REPORT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression/lastSuccessfulBuild/testReport/api/json';
-    private static readonly MAIN_BUILD_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_main_regression/api/json';
-    private static readonly MAIN_LAST_COMPLETED_TEST_REPORT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_main_regression/lastSuccessfulBuild/testReport/api/json';
+    private static readonly QA_BUILD_URL_API:string = QA_BASE_URL + JSON_API;
+    private static readonly QA_LAST_SUCCESSFUL_TEST_REPORT_URL:string = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE;
+    private static readonly QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API:string = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
+    private static readonly MAIN_BUILD_URL_API:string = MAIN_BASE_URL + JSON_API;
+    private static readonly MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL:string = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE;
+    private static readonly MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API:string = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
 
     constructor(private http: Http) { };
 
@@ -30,9 +37,9 @@ export class JenkinsService {
     getJenkinsJob(job: JenkinsJobEnum): Promise<JenkinsJob> {
         let url = '';
         if(job === JenkinsJobEnum.MAIN) {
-            url = JenkinsService.MAIN_BUILD_URL;
+            url = JenkinsService.MAIN_BUILD_URL_API;
         } else if (job == JenkinsJobEnum.QA) {
-            url = JenkinsService.QA_BUILD_URL;
+            url = JenkinsService.QA_BUILD_URL_API;
         } else {
             console.error('Invalid job parameter');
             return;
@@ -55,15 +62,27 @@ export class JenkinsService {
             }).catch(this.handleError);
     }
 
+    getLatestTestReportUrl(job: JenkinsJobEnum): string {
+        let url = '';
+        if(job === JenkinsJobEnum.MAIN) {
+            url = JenkinsService.MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL;
+        } else if (job == JenkinsJobEnum.QA) {
+            url = JenkinsService.QA_LAST_SUCCESSFUL_TEST_REPORT_URL;
+        } else {
+            console.error('Invalid job parameter');
+        }
+
+        return url;
+    }
+
     getLatestTestReport(job: JenkinsJobEnum): Promise<JenkinsTestReport> {
         let url = '';
         if(job === JenkinsJobEnum.MAIN) {
-            url = JenkinsService.MAIN_LAST_COMPLETED_TEST_REPORT_URL;
+            url = JenkinsService.MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API;
         } else if (job == JenkinsJobEnum.QA) {
-            url = JenkinsService.QA_LAST_COMPLETED_TEST_REPORT_URL;
+            url = JenkinsService.QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API;
         } else {
             console.error('Invalid job parameter');
-            return;
         }
 
         return this.http.get(url)
