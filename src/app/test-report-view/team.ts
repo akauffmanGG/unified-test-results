@@ -18,3 +18,4 @@ export const LaserLemonTeam = new TeamInstance('Laser Lemon', 'laser_lemon_team'
 export const IndigoTeam = new TeamInstance('Indigo', 'indigo_team');
 export const PeachPuffTeam = new TeamInstance('Peach Puff', 'peach_puff_team');
 export const MissingTeam = new TeamInstance('None', 'missing_delivery_team');
+export const Teams: Team[] = [BlueTeam, LaserLemonTeam, IndigoTeam, PeachPuffTeam, MissingTeam];

@@ -17,8 +17,6 @@ export class TestReportTableComponent implements OnInit {
     @Input()
     testReport: TestReport;
 
-    rows: TestCaseResult[];
-
     columns: any[] = [
         { name: 'Test Case', prop: 'displayName' },
         { name: 'QA Status', prop: 'qaStatus', cellClass: this.statusCellClass },

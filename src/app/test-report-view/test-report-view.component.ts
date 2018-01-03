@@ -56,7 +56,7 @@ export class TestReportViewComponent implements OnInit {
             });
         }).then(() => {
             this.addTeamsToResults();
-            this.filterRows();
+            this.testReport.displayedRows = this.testCaseResults;
 
             return this.addJiraIssues();
         }).then(() => { this.loading = false; }) //Ugh, no finally block. Seriously?
@@ -75,7 +75,7 @@ export class TestReportViewComponent implements OnInit {
         this.filterResults.showOnlyConsistentFailures = this.showOnlyConsistentFailures;
         this.filterResults.showFixedIssues = this.showFixedIssues;
 
-        this.testReport.testCaseResults = this.filterResults.filter(this.testCaseResults);
+        this.testReport.displayedRows = this.filterResults.filter(this.testCaseResults);
     }
 
     private addJiraIssues(): Promise<any> {

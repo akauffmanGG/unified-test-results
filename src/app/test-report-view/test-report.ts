@@ -1,7 +1,7 @@
 import TestCaseResult from './test-case-result';
 
 export class TestReport {
-    testCaseResults: TestCaseResult[];
+    displayedRows: TestCaseResult[];
 
     qaSuccessTrend: number;
     qaFailTrend: number;

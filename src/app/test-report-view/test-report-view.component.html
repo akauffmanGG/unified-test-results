@@ -12,36 +12,13 @@
             </button>
 
             <div *ngIf="testCaseResults && testCaseResults.length && !loading">
-                <h4>Filters</h4>
-                <p>
-                    <input [(ngModel)]="qaSelected" (change)="filterRows()" type="checkbox" id="qaCheckbox">
-                    <label for="qaCheckbox">QA</label>
-
-                    <input [(ngModel)]="mainSelected" (change)="filterRows()" type="checkbox" id="mainCheckbox">
-                    <label for="mainCheckbox">Main</label>
-                </p><p>
-                    <input [(ngModel)]="showOnlyFailures" (change)="filterRows()" type="checkbox" id="failuresCheckbox">
-                    <label for="failuresCheckbox">Show only failures</label>
-                </p><p>
-                    <input [(ngModel)]="showOnlyBothFailures" (change)="filterRows()" type="checkbox" id="failuresBothCheckbox">
-                    <label for="failuresBothCheckbox">Show only failures for both</label>
-                </p>
-                <p>
-                    <input [(ngModel)]="showOnlyConsistentFailures" (change)="filterRows()" type="checkbox" id="failuresConsistentCheckbox">
-                    <label for="failuresConsistentCheckbox">Show only consistent failures (>3)</label>
-                </p>
-                <p>
-                    <input [(ngModel)]="showFixedIssues" (change)="filterRows()" type="checkbox" id="fixedIssuesCheckbox">
-                    <label for="fixedIssuesCheckbox">Show fixed Jira Issues</label>
-                </p>
+                <test-report-filter [testReport] = "testReport" [testResults] = "testCaseResults"></test-report-filter>
             </div>
         </div>
         <div class="col-lg-10 main">
             <p *ngIf="testCaseResults && testCaseResults.length && !loading">
               <test-report-table [testReport] = "testReport"></test-report-table>
             </p>
-
-
         </div>
     </div>
 </div>

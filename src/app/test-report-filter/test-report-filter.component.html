@@ -1,0 +1,63 @@
+<fieldset>
+    <legend>Filters</legend>
+    <div class="form-group">
+        <label for="findTestCase">Test Case</label>
+        <input id="findTestCase" [(ngModel)]="findTestCase" class="form-control form-control-sm" type="text" placeholder="Find Test Case" (keyup)="filterRows()">
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label>QA Status</label>
+        </p>
+
+        <input type="radio" name="qaStatusSelect" id="qaStatusAll" value="ALL" selected (change)="filterRows()" [(ngModel)]="selectedQaStatus">
+        <label for="qaStatusAll">All</label>
+        <input type="radio" name="qaStatusSelect" id="qaStatusFailed" value="FAILED" (change)="filterRows()" [(ngModel)]="selectedQaStatus">
+        <label for="qaStatusFailed">Failed</label>
+        <input type="radio" name="qaStatusSelect" id="qaStatusPassed" value="PASSED" (change)="filterRows()" [(ngModel)]="selectedQaStatus">
+        <label for="qaStatusPassed">Passed</label>
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label for="mainStatusSelect">Main Status</label>
+        </p>
+
+        <input type="radio" name="mainStatusSelect" id="mainStatusAll" value="ALL" selected (change)="filterRows()" [(ngModel)]="selectedMainStatus">
+        <label for="mainStatusAll">All</label>
+        <input type="radio" name="mainStatusSelect" id="mainStatusFailed" value="FAILED" (change)="filterRows()" [(ngModel)]="selectedMainStatus">
+        <label for="mainStatusFailed">Failed</label>
+        <input type="radio" name="mainStatusSelect" id="mainStatusPassed" value="PASSED" (change)="filterRows()" [(ngModel)]="selectedMainStatus">
+        <label for="mainStatusPassed">Passed</label>
+    </div>
+
+    <div class="form-group">
+        <label for="teamSelect">Team</label>
+        <select class="form-control" multiple="true" id="teamSelect" (change)="filterRows()" [(ngModel)]="selectedTeams">
+            <option *ngFor="let team of teams" [ngValue]="team">{{team.displayName}}</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label>SCR</label>
+        </p>
+
+        <p>
+            <input [(ngModel)]="findScr" class="form-control form-control-sm" type="text" placeholder="Find SCR" id="findScr" (keyup)="scrSearch()">
+        </p>
+
+        <input type="radio" name="scrSelect" id="scrSelectAll" value="ALL" selected (change)="filterRows()" [(ngModel)]="selectedScr">
+        <label for="scrSelectAll">All</label>
+        <input type="radio" name="scrSelect" id="scrSelectNone" value="NONE" (change)="filterRows()" [(ngModel)]="selectedScr">
+        <label for="scrSelectNone">No SCR</label>
+        <input type="radio" name="scrSelect" id="scrSelectHasScr" value="SCR" (change)="filterRows()" [(ngModel)]="selectedScr">
+        <label for="scrSelectHasScr">Has SCR</label>
+        <input type="radio" name="scrSelect" id="scrSelectNeedsScr" value="NEEDS_SCR" (change)="filterRows()" [(ngModel)]="selectedScr">
+        <label for="scrSelectNeedsScr">Needs SCR</label>
+    </div>
+
+    <p>
+        <button type="button" class="btn btn-link btn-sm" (click)="clearFilters()">Clear Filters</button>
+    </p>
+</fieldset>
