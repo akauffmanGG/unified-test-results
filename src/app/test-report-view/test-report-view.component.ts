@@ -46,11 +46,11 @@ export class TestReportViewComponent implements OnInit {
         this.testReport = new TestReport();
 
         this.jenkinsService.getLatestTestReport(JenkinsJobEnum.QA).then(testReport => {
-            this.testReport.qaReportUrl = this.jenkinsService.getLatestTestReportUrl(JenkinsJobEnum.QA);
+            this.testReport.qaReportUrl = testReport.url;
             return _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.QA));
         }).then((qaResults: TestCaseResult[]) => {
             return this.jenkinsService.getLatestTestReport(JenkinsJobEnum.MAIN).then(testReport => {
-                this.testReport.mainReportUrl = this.jenkinsService.getLatestTestReportUrl(JenkinsJobEnum.MAIN);
+                this.testReport.mainReportUrl = testReport.url;
                 let mainResults: TestCaseResult[] = _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.MAIN));
                 this.testCaseResults = this.mergeResults(qaResults, mainResults);
             });

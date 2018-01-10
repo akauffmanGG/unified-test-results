@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
-//TODO: Convert to HttpClientModule
-import { Headers, Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -10,21 +9,9 @@ import { JenkinsBuild } from './jenkins-build';
 import JenkinsTestReport from './jenkins-test-report';
 import JenkinsJobEnum from './jenkins-job-enum';
 
-const QA_BASE_URL:string = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression';
-const MAIN_BASE_URL:string = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_main_regression';
-const JSON_API:string = '/api/json';
-const LAST_SUCCESSFUL_ROUTE:string = '/lastSuccessfulBuild/testReport';
-
 @Injectable()
 export class JenkinsService {
-    private static readonly QA_BUILD_URL_API:string = QA_BASE_URL + JSON_API;
-    private static readonly QA_LAST_SUCCESSFUL_TEST_REPORT_URL:string = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE;
-    private static readonly QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API:string = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
-    private static readonly MAIN_BUILD_URL_API:string = MAIN_BASE_URL + JSON_API;
-    private static readonly MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL:string = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE;
-    private static readonly MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API:string = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
-
-    constructor(private http: Http) { };
+    constructor(private http: HttpClient) { };
 
     getMainJob(): Promise<JenkinsJob> {
         return this.getJenkinsJob(JenkinsJobEnum.MAIN);
@@ -37,9 +24,9 @@ export class JenkinsService {
     getJenkinsJob(job: JenkinsJobEnum): Promise<JenkinsJob> {
         let url = '';
         if(job === JenkinsJobEnum.MAIN) {
-            url = JenkinsService.MAIN_BUILD_URL_API;
+            url = 'api/jenkins/main/job';
         } else if (job == JenkinsJobEnum.QA) {
-            url = JenkinsService.QA_BUILD_URL_API;
+            url = 'api/jenkins/qa/job';
         } else {
             console.error('Invalid job parameter');
             return;
@@ -48,39 +35,17 @@ export class JenkinsService {
         return this.http.get(url)
             .toPromise()
             .then(response => {
-                console.log('Get Latest Completed Build completed with status ' + response.status);
-                return new JenkinsJob(response.json());
+                console.log('Get Latest Completed Build completed successfully');
+                return new JenkinsJob(response);
             }).catch(this.handleError);
     };
-
-    getTestReport(build: JenkinsBuild): Promise<JenkinsTestReport> {
-        return this.http.get(build.testReportUrl)
-            .toPromise()
-            .then(response => {
-                console.log('Get Test Report completed with status ' + response.status);
-                return new JenkinsBuild(response.json());
-            }).catch(this.handleError);
-    }
-
-    getLatestTestReportUrl(job: JenkinsJobEnum): string {
-        let url = '';
-        if(job === JenkinsJobEnum.MAIN) {
-            url = JenkinsService.MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL;
-        } else if (job == JenkinsJobEnum.QA) {
-            url = JenkinsService.QA_LAST_SUCCESSFUL_TEST_REPORT_URL;
-        } else {
-            console.error('Invalid job parameter');
-        }
-
-        return url;
-    }
 
     getLatestTestReport(job: JenkinsJobEnum): Promise<JenkinsTestReport> {
         let url = '';
         if(job === JenkinsJobEnum.MAIN) {
-            url = JenkinsService.MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API;
+            url = '/api/jenkins/main/test_report/latest';
         } else if (job == JenkinsJobEnum.QA) {
-            url = JenkinsService.QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API;
+            url = '/api/jenkins/qa/test_report/latest';
         } else {
             console.error('Invalid job parameter');
         }
@@ -88,8 +53,8 @@ export class JenkinsService {
         return this.http.get(url)
             .toPromise()
             .then(response => {
-                console.log('Get Last Completed Test Report completed with status ' + response.status);
-                return new JenkinsTestReport(response.json());
+                console.log('Get Last Completed Test Report completed successfully');
+                return new JenkinsTestReport(response);
             }).catch(this.handleError);
     }
 

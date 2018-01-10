@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { JiraQuery } from './jira-query';
 import { JiraIssue } from './jira-issue';
 
@@ -8,16 +8,10 @@ import TestCaseResult from '../test-report-view/test-case-result';
 
 @Injectable()
 export class JiraService {
-
-    private static readonly ANDY_AUTH: string = 'Basic QW5keS5LYXVmZm1hbjpTY2hsZWZ0eTE=';
-
-    private static readonly QUERY_URL: string = 'https://devjira.inin.com/rest/api/2/search?jql=%22Development%20Labels%22%20in%20(cart_issue)%20and%20%22Development%20Labels%22%20in%20(consistent_failure)%20and%20status%20!=%20resolved&fields=id,key,summary,customfield_10073';
-    private static readonly ISSUE_URL: string = 'https://devjira.inin.com/rest/api/2/issue';
-
     constructor(private http: HttpClient) { }
 
     getFailureIssues(): Promise<JiraQuery> {
-        return this.http.get<JiraQuery>(JiraService.QUERY_URL).toPromise()
+        return this.http.get<JiraQuery>('api/jira/issues').toPromise()
             .then(response => {
                 return new JiraQuery(response);
             }, this.handleError);
@@ -28,76 +22,33 @@ export class JiraService {
         return Promise.reject(error.message || error);
     }
 
-    postNewIssue(testCaseResult: TestCaseResult): Promise<JiraIssue> {
+    postNewIssue(testCaseResult: TestCaseResult): Promise<JiraIssue> { 
+        let params = new HttpParams().set('description', this.createDescription(testCaseResult))
+            .set('testCase', testCaseResult.case)
+            .set('teamLabel', testCaseResult.team.developmentLabel);
 
-        let editObj = {
-            fields: {
-                customfield_10073: testCaseResult.case //Test Case Id
-            }
-        }
+        return this.http.post('api/jira/issue', {}, {
+            params
+        }).toPromise().then((response:any) => {
+            let newIssueKey = response.issueKey;
+            console.log('Issue ' + newIssueKey + ' created successfully');
 
-        let authHeader = {
-            headers: new HttpHeaders().set('Authorization', JiraService.ANDY_AUTH),
-        };
-
-        let newIssueKey;
-        return this.http.post(JiraService.ISSUE_URL, this.createIssueObj(testCaseResult), authHeader).toPromise()
-            .then((response: any) => {
-                console.log('Issue ' + response.key + ' created successfully');
-                newIssueKey = response.key;
-                return;
-            }).then(() => {
-                return this.http.put(JiraService.ISSUE_URL + '/' + newIssueKey, editObj, authHeader).toPromise();
-            }).then((response: any) => {
-                console.log('Issue ' + newIssueKey + ' edited successfully');
-                return this.http.get(JiraService.ISSUE_URL + '/' + newIssueKey, authHeader).toPromise();
-            }).then((response: any) => {
-                return new JiraIssue(response);
-            });//TODO: Error handling
-
+            return this.http.get('/api/jira/issue/' + newIssueKey).toPromise()
+        }).then((response: any) => {
+            return new JiraIssue(response);
+        });//TODO: Error handling
     }
 
-    private createIssueObj(testCaseResult: TestCaseResult): any {
+    private createDescription(testCaseResult: TestCaseResult): string {
         let description: string = `${testCaseResult.suite} ${testCaseResult.case} fails at `;
 
         if(testCaseResult.qaResult.isConsistentlyFailing && testCaseResult.mainResult.isConsistentlyFailing) {
-            description += 'Main and QA'
+            return description + 'Main and QA'
         } else if(testCaseResult.qaResult.isConsistentlyFailing) {
-            description += 'QA';
+            return description + 'QA';
         } else if(testCaseResult.mainResult.isConsistentlyFailing) {
-            description += 'Main'
-        }
-
-        return {
-            fields: {
-                project:
-                {
-                    key: "WICCLIENT"
-                },
-                description,
-                issuetype: {
-                    name: "Bug"
-                },
-                summary: description,
-                versions: [{
-                    name: "main" //TODO: replace with correct version when qa failure
-                }],
-                fixVersions: [{
-                    name: "main"
-                }],
-                components: [{
-                    name: "E2E Tests"
-                }],
-                priority: {
-                    name: "P3"
-                },
-                //Found in Branch
-                customfield_11990: {
-                    value: "Systest"
-                },
-                //Development labels
-                customfield_10350: ["cart_issue", "consistent_failure", testCaseResult.team.developmentLabel]
-            }
+            return description + 'Main'
         }
     }
+
 }

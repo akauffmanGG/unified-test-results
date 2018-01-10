@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve && node src/server/server.js",
+    "build": "ng build && node src/server/server.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -24,8 +24,11 @@
     "@angular/platform-server": "^4.4.6",
     "@angular/router": "^4.4.6",
     "@swimlane/ngx-datatable": "^10.4.0",
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
+    "express": "^4.16.2",
     "jquery": "^3.2.1",
     "less": "^2.7.3",
     "lodash": "^4.17.4",
