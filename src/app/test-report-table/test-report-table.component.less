@@ -1,4 +1,5 @@
 @import "../../../node_modules/bootstrap/less/variables.less";
+@import "../variables.less";
 
 @hover-color: #485563;
 
@@ -35,7 +36,7 @@
 
     ::ng-deep .ngx-datatable.material {
         background: none;
-        height: 90vh;
+        height: calc(~'100vh -'@header-height~' - 15px');
 
         .datatable-row-group:hover {
             background-color: @hover-color;

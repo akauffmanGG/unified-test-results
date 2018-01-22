@@ -23,8 +23,8 @@
         "../node_modules/bootstrap/dist/css/bootstrap.min.css"
       ],
       "scripts": [
-          "../node_modules/jquery/dist/jquery.min.js",
-          "../node_modules/bootstrap/dist/js/bootstrap.min.js"
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -62,6 +62,10 @@
     "class": {
       "spec": false
     },
-    "component": {}
+    "component": {
+    }
+  },
+  "warnings": {
+    "typescriptMismatch": false
   }
 }
