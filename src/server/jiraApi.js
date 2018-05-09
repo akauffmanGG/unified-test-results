@@ -7,7 +7,7 @@ let credentials = process.env.JIRA_USER + ':' + process.env.JIRA_PASSWORD;
 const JIRA_AUTH = 'Basic ' + new Buffer(credentials).toString('base64');
 console.info(JIRA_AUTH);
 
-const QUERY_URL = 'https://devjira.inin.com/rest/api/2/search?jql=%22Development%20Labels%22%20in%20(cart_issue)%20and%20%22Development%20Labels%22%20in%20(consistent_failure)%20and%20status%20!=%20resolved&fields=id,key,summary,customfield_10073';
+const QUERY_URL = 'https://devjira.inin.com/rest/api/2/search?jql=%22Development%20Labels%22%20in%20(cart_issue)%20and%20%22Development%20Labels%22%20in%20(consistent_failure)%20and%20status%20not%20in%20(resolved,%20backlog)&fields=id,key,summary,customfield_10073';
 const ISSUE_URL = 'https://devjira.inin.com/rest/api/2/issue';
 
 let config = {
