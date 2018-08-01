@@ -21,6 +21,8 @@ const teamSuiteMap = new Map([
     , ['TS3976', BlueTeam]
     , ['TS3977', BlueTeam]
     , ['TS3978', BlueTeam]
+    , ['TS4134', BlueTeam]
+    , ['TS4180', BlueTeam]
     , ['TS1874', IndigoTeam]
     , ['TS1876', IndigoTeam]
     , ['TS2048', IndigoTeam]
@@ -51,6 +53,9 @@ const teamSuiteMap = new Map([
     , ['TS3517', LaserLemonTeam]
     , ['TS3698', LaserLemonTeam]
     , ['TS3801', LaserLemonTeam]
+    , ['TS4178', LaserLemonTeam]
+    , ['TS4185', LaserLemonTeam]
+    , ['TS4246', LaserLemonTeam]
     , ['TS2047', PeachPuffTeam]
     , ['TS2052', PeachPuffTeam]
     , ['TS2054', PeachPuffTeam]
@@ -70,6 +75,7 @@ const teamSuiteMap = new Map([
     , ['TS4103', PeachPuffTeam]
     , ['TS4098', PeachPuffTeam]
     , ['TS4127', PeachPuffTeam]
+    , ['TS4201', PeachPuffTeam]
 ]);
 
 export default teamSuiteMap;
