@@ -1,4 +1,5 @@
 import { JenkinsBuild } from './jenkins-build';
+import * as _ from 'lodash';
 
 export class JenkinsJob {
     lastBuild: JenkinsBuild;
@@ -8,6 +9,7 @@ export class JenkinsJob {
     lastSuccessfulBuild: JenkinsBuild;
     lastUnstableBuild: JenkinsBuild;
     lastUnsuccessfulBuild: JenkinsBuild;
+    builds: JenkinsBuild[];
 
     constructor(obj: any) {
         if(obj.lastBuild) {
@@ -37,5 +39,7 @@ export class JenkinsJob {
         if(obj.lastUnsuccessfulBuild) {
             this.lastUnsuccessfulBuild = new JenkinsBuild(obj.lastUnsuccessfulBuild);
         }
+
+        this.builds = _.map(obj.builds, _build => new JenkinsBuild(_build));
     }
 }

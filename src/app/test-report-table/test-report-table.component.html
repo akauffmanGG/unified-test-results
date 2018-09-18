@@ -4,7 +4,6 @@
         #testReportTable
         class="material expandable"
         [rows] = "testReport.displayedRows"
-        [columns] = "columns"
         [footerHeight]="50"
         [scrollbarV]="true"
         [scrollbarH]="true"
@@ -38,6 +37,12 @@
 
         <ngx-datatable-column name="QA Age" prop="qaResult.age"></ngx-datatable-column>
 
+        <ngx-datatable-column name="QA History" prop="qaHistory" [comparator]="historyComparator">
+            <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
+                <test-case-history [history]="value"></test-case-history>
+            </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column
             name="Main Status"
             prop="mainResult.status"
@@ -45,6 +50,13 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Main Age" prop="mainResult.age"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Main History" prop="mainHistory" [comparator]="historyComparator">
+            <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
+                <test-case-history [history]="value"></test-case-history>
+            </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Team" prop="team.displayName"></ngx-datatable-column>
         <ngx-datatable-column name="SCR" prop="jiraIssue" [cellClass]="scrCellClass" [comparator]="scrComparator">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>

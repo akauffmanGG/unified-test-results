@@ -5,25 +5,34 @@ import { JiraService } from '../jira/jira.service';
 import { JiraIssue } from '../jira/jira-issue';
 import * as _ from 'lodash';
 
+
+function getFlappinessMeasure(history: boolean[]): number {
+    let flappiness: number = 0;
+
+    // increment the flappiness measure each time the result changes.
+    let lastResult: boolean = history[0];
+    history.forEach(result => {
+        if(result !== lastResult) {
+            flappiness++;
+            lastResult = result;
+        }
+    });
+
+    return flappiness;
+}
+
 @Component({
     selector: 'test-report-table',
     templateUrl: './test-report-table.component.html',
     styleUrls: ['./test-report-table.component.less'],
     providers: [JiraService]
 })
+
 export class TestReportTableComponent implements OnInit {
     @ViewChild('testReportTable') table: any;
 
     @Input()
     testReport: TestReport;
-
-    columns: any[] = [
-        { name: 'Test Case', prop: 'displayName' },
-        { name: 'QA Status', prop: 'qaStatus', cellClass: this.statusCellClass },
-        { name: 'QA Age', prop: 'qaAge' },
-        { name: 'Main Status', prop: 'mainStatus', cellClass: this.statusCellClass },
-        { name: 'Main Age', prop: 'mainAge' },
-        { name: 'Team' }];
 
     constructor(private jiraService: JiraService) { }
 
@@ -66,6 +75,21 @@ export class TestReportTableComponent implements OnInit {
             }
         }
     }
+
+    //Compares the flappiness of one test history to another.
+    historyComparator(valueA: boolean[], valueB: boolean[]): number {
+        let flappinessA: number = getFlappinessMeasure(valueA);
+        let flappinessB: number = getFlappinessMeasure(valueB);
+
+        if(flappinessA < flappinessB) {
+            return -1;
+        } else if (flappinessA > flappinessB) {
+            return 1;
+        }
+        
+        return 0;
+    }
+
 
     createScr(row: TestCaseResult): void {
         row.isCreatingJiraIssue = true;

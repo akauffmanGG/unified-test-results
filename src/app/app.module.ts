@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import { TestReportTableComponent } from './test-report-table/test-report-table.component';
 import { TestReportViewComponent } from './test-report-view/test-report-view.component';
 import { TestReportFilterComponent } from './test-report-filter/test-report-filter.component';
+import { TestCaseHistoryComponent } from './test-case-history/test-case-history.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestReportTableComponent,
     TestReportViewComponent,
-    TestReportFilterComponent
+    TestReportFilterComponent,
+    TestCaseHistoryComponent
   ],
   imports: [
     BrowserModule,

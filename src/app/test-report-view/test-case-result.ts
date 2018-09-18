@@ -16,7 +16,9 @@ export default class TestCaseResult {
     case: string;
     team: Team;
     qaResult: TestCaseJobResult;
+    qaHistory: boolean[] = [];
     mainResult: TestCaseJobResult;
+    mainHistory: boolean[] = [];
     jiraIssue: JiraIssue;
     isCreatingJiraIssue: boolean;
 
@@ -65,5 +67,13 @@ export default class TestCaseResult {
         if(!this.mainResult.status) {
             this.mainResult = other.mainResult;
         }
+    }
+
+    addQaHistory(result: TestCaseJobResult) {
+        this.qaHistory.push(!result.isFailure);
+    }
+
+    addMainHistory(result: TestCaseJobResult) {
+        this.mainHistory.push(!result.isFailure);
     }
 }

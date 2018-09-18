@@ -15,6 +15,8 @@ import TestCaseResult from './test-case-result';
 import { TestReport } from './test-report';
 import teamSuiteMap from './team-suite-map';
 import { MissingTeam } from './team';
+import { TestCaseJobResult } from './test-case-job-result';
+import { promise } from 'protractor';
 
 
 @Component({
@@ -59,6 +61,21 @@ export class TestReportViewComponent implements OnInit {
             this.testReport.displayedRows = this.testCaseResults;
 
             return this.addJiraIssues();
+        }).then(() => {
+            let promises : Promise<any>[] = [
+                this.jenkinsService.getHistoricalReports(JenkinsJobEnum.QA)
+                .then(results => {
+                    this.addHistory(_.map(results, 'report'), JenkinsJobEnum.QA);
+                }),
+
+                this.jenkinsService.getHistoricalReports(JenkinsJobEnum.MAIN)
+                .then(results => {
+                    this.addHistory(_.map(results, 'report'), JenkinsJobEnum.MAIN);
+                })
+            ];
+
+            return Promise.all(promises);
+
         }).then(() => { this.loading = false; }) //Ugh, no finally block. Seriously?
         .catch(() => {
             this.loading = false;
@@ -120,6 +137,30 @@ export class TestReportViewComponent implements OnInit {
         });
 
         return mergedResults;
+    }
+
+    private addHistory(historicalResults: JenkinsTestReport[], jobType:JenkinsJobEnum): void {
+        // Create list of maps of class name to result
+        let resultsMapList = _.map(historicalResults, (testReport:JenkinsTestReport) => {
+            return _.keyBy(testReport.testCases, (result: TestCaseResult) => result.className);
+        });
+
+        //iterate through testCaseResults
+        _.map(this.testCaseResults, (testCaseResult: TestCaseResult) => {
+            _.map(resultsMapList, (resultMap:any) => {
+                if(resultMap[testCaseResult.className]) {
+                    let result:TestCaseJobResult = new TestCaseJobResult(resultMap[testCaseResult.className]);
+
+                    if(jobType === JenkinsJobEnum.MAIN) {
+                        testCaseResult.addMainHistory(result);
+                    } else {
+                        testCaseResult.addQaHistory(result);
+                    }
+                }
+                
+            });
+        })
+
     }
 
     private addTeamsToResults(): void {
