@@ -1,19 +1,19 @@
-@import "../../../node_modules/bootstrap/less/variables.less";
-@import "../variables.less";
+@import "../style/variables.scss";
 
 .test-case-history-component {
     .history-result-container{
-
+        display: inline-block;
+        
         .history-result {
             width: 3px;
             height: 22px;
             display: inline-block;
-            background-color: @brand-danger;
+            background-color: $danger;
             margin-left:4px;
             vertical-align: top;
     
             &.success {
-                background-color: @brand-success;
+                background-color: $success;
             }
         }
     }

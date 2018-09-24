@@ -22,7 +22,7 @@ import { promise } from 'protractor';
 @Component({
     selector: 'test-report-view',
     templateUrl: './test-report-view.component.html',
-    styleUrls: ['./test-report-view.component.less'],
+    styleUrls: ['./test-report-view.component.scss'],
     providers: [JenkinsService, JiraService, FilterResults]
 })
 export class TestReportViewComponent implements OnInit {

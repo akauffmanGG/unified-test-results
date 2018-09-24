@@ -1,7 +1,7 @@
-@import "../../../node_modules/bootstrap/less/variables.less";
-@import "../variables.less";
+@import "../style/variables.scss";
+@import "../style/mixins.scss";
 
-@hover-color: #485563;
+$hover-color: #485563;
 
 .test-report-table-component {
 
@@ -13,21 +13,23 @@
         .spinner-three-bounce {
             position: inherit;
             line-height: 1;
+            margin: 0px;
+            padding-top: 5px;
 
             .bounce1 {
-                background-color: @brand-info !important;
+                background-color: $info !important;
                 height: 10px;
                 width: 10px;
             }
 
             .bounce2 {
-                background-color: @brand-success !important;
+                background-color: $success !important;
                 height: 10px;
                 width: 10px;
             }
 
             .bounce3 {
-                background-color: @brand-primary !important;
+                background-color: $primary !important;
                 height: 10px;
                 width: 10px;
             }
@@ -36,12 +38,12 @@
 
     ::ng-deep .ngx-datatable.material {
         background: none;
-        height: calc(~'100vh -'@header-height~' - 15px');
+        height: calc(100vh - #{$header-height} - 15px);
 
         .datatable-row-group:hover {
-            background-color: @hover-color;
+            background-color: $hover-color;
             .datatable-body-cell.status-failed {
-                opacity: .65;
+                @include opacity(.65);
             }
         }
 
@@ -72,7 +74,7 @@
 
         .datatable-body-row {
             .datatable-body-cell.status-failed {
-                background-color: @brand-danger;
+                background-color: $danger;
             }
         }
 
@@ -84,7 +86,7 @@
         .datatable-header-cell,
         .datatable-footer,
         a {
-            color: @gray-lighter;
+            color: $gray-100;
         }
 
         .needs-scr {
@@ -93,11 +95,11 @@
         }
 
         .success-trend {
-            color: @brand-success
+            color: $success
         }
 
         .fail-trend {
-            color: @brand-danger
+            color: $danger
         }
     }
 

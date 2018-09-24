@@ -1,0 +1,20 @@
+@import "../style/variables.scss";
+
+.test-report-view {
+    overflow: hidden;
+}
+
+//TODO: Extract into common file
+::ng-deep .spinner-three-bounce {
+    .bounce1 {
+        background-color: $info !important;
+    }
+
+    .bounce2 {
+        background-color: $success !important;
+    }
+
+    .bounce3 {
+        background-color: $primary !important;
+    }
+}

@@ -24,7 +24,7 @@ function getFlappinessMeasure(history: boolean[]): number {
 @Component({
     selector: 'test-report-table',
     templateUrl: './test-report-table.component.html',
-    styleUrls: ['./test-report-table.component.less'],
+    styleUrls: ['./test-report-table.component.scss'],
     providers: [JiraService]
 })
 
