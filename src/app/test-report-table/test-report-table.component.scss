@@ -58,17 +58,22 @@ $hover-color: #485563;
         .datatable-row-detail {
             background-color: #2e3d4c;
 
-            .stacktrace-row {
+            .error-row {
                 display: flex;
                 flex-direction: row;
 
-                .stacktrace-message {
+                .error-message {
                     flex: 0 1 auto;
                     white-space: normal;
                     min-width: 0px;
                     font-family: monospace;
-                    padding-right: 30px
+                    padding-right: 30px;
+
+                    .error-message-title {
+                        color: $info
+                    }
                 }
+                
             }
         }
 

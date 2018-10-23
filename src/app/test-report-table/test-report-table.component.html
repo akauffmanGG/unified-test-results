@@ -12,12 +12,14 @@
 
         <ngx-datatable-row-detail [rowHeight]="100">
             <ng-template let-row="row"  ngx-datatable-row-detail-template>
-                <div class="stacktrace-row">
-                    <div class="stacktrace-message">
-                        {{row.qaResult.stackTraceMessage}}
+                <div class="error-row">
+                    <div *ngIf="row.qaResult.errorMessage" class="error-message">
+                        <span class="error-message-title">QA Error Message:</span> 
+                        {{row.qaResult.errorMessage}}
                     </div>
-                    <div class="stacktrace-message">
-                        {{row.mainResult.stackTraceMessage}}
+                    <div *ngIf="row.mainResult.errorMessage" class="error-message">
+                            <span class="error-message-title">Main Error Message:</span>
+                        {{row.mainResult.errorMessage}}
                     </div>
                 </div>
             </ng-template>

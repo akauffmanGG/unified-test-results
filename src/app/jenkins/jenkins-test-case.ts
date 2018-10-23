@@ -6,6 +6,7 @@ export default class JenkinsTestCase {
     status: string;
     suite: string;
     case: string;
+    errorDetails: string;
     errorStackTrace: string;
 
     constructor(obj: any) {
@@ -14,6 +15,7 @@ export default class JenkinsTestCase {
         this.failedSince = obj.failedSince;
         this.name = obj.name;
         this.status = obj.status;
+        this.errorDetails = obj.errorDetails;
         this.errorStackTrace = obj.errorStackTrace;
 
         let classNameParts: string[] = this.className.split('.');
