@@ -1,6 +1,8 @@
 <div class="test-case-history-component">
     <div class="history-result-container">
-        <div class="history-result" [class.success]="result" *ngFor="let result of history">
+        <div class="history-result" [class.success]="!result.isFailure" *ngFor="let result of history">
         </div>
+
+        <!-- <button type="button" #historyButton class="btn btn-history btn-info" data-container="body" data-toggle="popover" title="Popover title" data-content="Coming Soon"></button> -->
     </div>
 </div>

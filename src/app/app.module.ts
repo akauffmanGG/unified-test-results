@@ -11,6 +11,7 @@ import { TestReportTableComponent } from './test-report-table/test-report-table.
 import { TestReportViewComponent } from './test-report-view/test-report-view.component';
 import { TestReportFilterComponent } from './test-report-filter/test-report-filter.component';
 import { TestCaseHistoryComponent } from './test-case-history/test-case-history.component';
+import { ErrorHistoryModalComponent } from './error-history-modal/error-history-modal.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TestCaseHistoryComponent } from './test-case-history/test-case-history.
     TestReportTableComponent,
     TestReportViewComponent,
     TestReportFilterComponent,
-    TestCaseHistoryComponent
+    TestCaseHistoryComponent,
+    ErrorHistoryModalComponent
   ],
   imports: [
     BrowserModule,
