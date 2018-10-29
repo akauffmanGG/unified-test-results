@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule }    from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { LoadingModule } from 'ngx-loading';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { TestReportTableComponent } from './test-report-table/test-report-table.component';
@@ -26,7 +27,8 @@ import { TestCaseHistoryComponent } from './test-case-history/test-case-history.
     HttpClientModule,
     FormsModule,
     NgxDatatableModule,
-    LoadingModule
+    LoadingModule,
+    NgbModule
   ],
 
   providers: [],
