@@ -7,6 +7,7 @@ export class TestCaseJobResult {
     failedSince: number;
     status: string;
     errorMessage: string;
+    recordingLink: string;
 
     get isFailure(): boolean {
         return this.status === 'FAILED';
@@ -41,7 +42,12 @@ export class TestCaseJobResult {
             .replace(/\s{2,}/g,'')
             .replace('ININ.Testing.Automation.Core.TraceTrueException :', '')
             .replace('ININ.Testing.Automation.ManagedICWS.NegativeICWSResponseException :', '')
-            .replace(/---- OpenQA\.Selenium\.WebDriverTimeoutException : Timed out after \d* seconds/g, '');
+            .replace(/---- OpenQA\.Selenium\.WebDriverTimeoutException : Timed out after \d* seconds/g, '')
+            .replace(/(recording:\s)(http:.*mp4)/gi, (match, group1, group2):string => {
+                this.recordingLink = group2;
+                
+                return '';
+            });
 
         return message;
     }

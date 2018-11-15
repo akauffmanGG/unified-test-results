@@ -16,7 +16,7 @@ export class TestCaseHistoryComponent implements OnChanges {
     failedResults: TestCaseJobResult[];
 
     ngOnChanges(changes: SimpleChanges) {
-        this.failedResults = _.filter(changes.history.currentValue, 'isFailure' );
+        this.failedResults = _.filter(changes.history.currentValue, 'isFailure' ).reverse();
     }
 
 }

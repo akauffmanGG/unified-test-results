@@ -8,6 +8,8 @@
     <div class="modal-body error-history-body">
         <div *ngFor="let result of history" class="error-message">
                 {{result.errorMessage}}
+
+                <a *ngIf="result.recordingLink" target="_blank" href="{{result.recordingLink}}"> recording</a>
         </div>
     </div>
     <div class="modal-footer">
