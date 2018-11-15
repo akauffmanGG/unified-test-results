@@ -1,0 +1,20 @@
+@import "../style/variables.scss";
+
+$btn-history-diameter: 7px;
+
+.error-history-body {
+    .error-message {
+        word-break: break-all;
+        border-bottom: 1px solid $light;
+    }
+}
+
+
+.btn-history {
+    padding: 0px;
+    height: $btn-history-diameter;
+    width: $btn-history-diameter;
+    border-radius: $btn-history-diameter;
+    vertical-align: top;
+    margin-left: 4px;
+}

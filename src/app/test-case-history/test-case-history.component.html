@@ -3,6 +3,6 @@
         <div class="history-result" [class.success]="!result.isFailure" *ngFor="let result of history">
         </div>
 
-        <!-- <button type="button" #historyButton class="btn btn-history btn-info" data-container="body" data-toggle="popover" title="Popover title" data-content="Coming Soon"></button> -->
+        <span *ngIf="failedResults.length"><error-history-modal [history]="failedResults"></error-history-modal></span>
     </div>
 </div>

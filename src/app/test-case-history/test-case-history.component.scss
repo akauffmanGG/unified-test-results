@@ -1,7 +1,5 @@
 @import "../style/variables.scss";
 
-$btn-history-diameter: 7px;
-
 .test-case-history-component {
     .history-result-container{
         display: inline-block;
@@ -19,14 +17,6 @@ $btn-history-diameter: 7px;
             }
         }
 
-        .btn-history {
-            padding: 0px;
-            height: $btn-history-diameter;
-            width: $btn-history-diameter;
-            border-radius: $btn-history-diameter;
-            vertical-align: top;
-            margin-left: 4px;
-        }
     }
     
 }

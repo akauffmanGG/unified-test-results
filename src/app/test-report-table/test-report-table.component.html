@@ -42,9 +42,6 @@
         <ngx-datatable-column name="QA History" prop="qaHistory" [comparator]="historyComparator">
             <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
                 <test-case-history [history]="value"></test-case-history>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                        Launch demo modal
-                      </button>
             </ng-template>
         </ngx-datatable-column>
 
@@ -104,4 +101,3 @@
     </ngx-datatable>
 
 </div>
-<error-history-modal></error-history-modal>

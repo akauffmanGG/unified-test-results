@@ -34,6 +34,6 @@ import { ErrorHistoryModalComponent } from './error-history-modal/error-history-
   ],
 
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, ErrorHistoryModalComponent]
 })
 export class AppModule { }

@@ -4,6 +4,7 @@ import TestCaseResult from '../test-report-view/test-case-result';
 import { JiraService } from '../jira/jira.service';
 import { JiraIssue } from '../jira/jira-issue';
 import * as _ from 'lodash';
+import { TestCaseJobResult } from '../test-report-view/test-case-job-result';
 
 
 function getFlappinessMeasure(history: boolean[]): number {
@@ -107,6 +108,4 @@ export class TestReportTableComponent implements OnInit {
         }
 
     }
-
-
 }
