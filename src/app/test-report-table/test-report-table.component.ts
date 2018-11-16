@@ -7,13 +7,13 @@ import * as _ from 'lodash';
 import { TestCaseJobResult } from '../test-report-view/test-case-job-result';
 
 
-function getFlappinessMeasure(history: boolean[]): number {
+function getFlappinessMeasure(history: TestCaseJobResult[]): number {
     let flappiness: number = 0;
 
     // increment the flappiness measure each time the result changes.
-    let lastResult: boolean = history[0];
+    let lastResult: TestCaseJobResult = history[0];
     history.forEach(result => {
-        if(result !== lastResult) {
+        if(result.isFailure !== lastResult.isFailure) {
             flappiness++;
             lastResult = result;
         }
@@ -78,7 +78,7 @@ export class TestReportTableComponent implements OnInit {
     }
 
     //Compares the flappiness of one test history to another.
-    historyComparator(valueA: boolean[], valueB: boolean[]): number {
+    historyComparator(valueA: TestCaseJobResult[], valueB: TestCaseJobResult[]): number {
         let flappinessA: number = getFlappinessMeasure(valueA);
         let flappinessB: number = getFlappinessMeasure(valueB);
 
