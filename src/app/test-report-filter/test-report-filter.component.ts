@@ -3,6 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TestReport } from '../test-report-view/test-report';
 import TestCaseResult from '../test-report-view/test-case-result';
 import { Team, Teams } from '../test-report-view/team';
+import { TestCaseJobResult } from '../test-report-view/test-case-job-result';
 
 @Component({
     selector: 'test-report-filter',
@@ -22,6 +23,7 @@ export class TestReportFilterComponent implements OnInit {
     selectedScr: string = 'ALL';
     findScr: string;
     findTestCase: string;
+    findErrorMessage: string;
 
     constructor() {
     }
@@ -43,7 +45,8 @@ export class TestReportFilterComponent implements OnInit {
                 this.isFilteredToTeam(result) &&
                 this.isFilteredToScr(result) &&
                 this.isSearchedScr(result) &&
-                this.isSearchedTestCase(result);
+                this.isSearchedTestCase(result) &&
+                this.isSearchedErrorMessage(result);
         });
     }
 
@@ -121,6 +124,22 @@ export class TestReportFilterComponent implements OnInit {
         return result.displayName.toLowerCase().includes(this.findTestCase.toLowerCase());
     }
 
+    private isSearchedErrorMessage(result: TestCaseResult): boolean {
+        if(!this.findErrorMessage) {
+            return true;
+        }
+
+        if(_.find(result.qaHistory, (jobResult: TestCaseJobResult) => jobResult.errorMessage.toLowerCase().includes(this.findErrorMessage.toLowerCase()))) {
+            return true;
+        }
+
+        if(_.find(result.mainHistory, (jobResult: TestCaseJobResult) => jobResult.errorMessage.toLowerCase().includes(this.findErrorMessage.toLowerCase()))) {
+            return true;
+        }
+
+        return false;
+    }
+
     clearFilters(): void {
         this.selectedQaStatus = 'ALL';
         this.selectedMainStatus = 'ALL';
@@ -128,6 +147,7 @@ export class TestReportFilterComponent implements OnInit {
         this.selectedScr = 'ALL';
         this.findScr = '';
         this.findTestCase = '';
+        this.findErrorMessage = '';
 
         this.filterRows();
     }

@@ -6,7 +6,7 @@ export class TestCaseJobResult {
     age: number;
     failedSince: number;
     status: string;
-    errorMessage: string;
+    errorMessage: string = "";
     recordingLink: string;
 
     get isFailure(): boolean {
