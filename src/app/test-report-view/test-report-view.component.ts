@@ -60,9 +60,9 @@ export class TestReportViewComponent implements OnInit {
             this.addTeamsToResults();
             this.testReport.displayedRows = this.testCaseResults;
 
-            return this.addJiraIssues();
-        }).then(() => {
             let promises : Promise<any>[] = [
+                this.addJiraIssues(),
+
                 this.jenkinsService.getHistoricalReports(JenkinsJobEnum.QA)
                 .then(results => {
                     this.addHistory(_.map(results, 'report'), JenkinsJobEnum.QA);
