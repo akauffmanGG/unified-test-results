@@ -20,18 +20,19 @@ router.get('/', (req, res) => {
 });
 
 // Get open issues from the query
-router.get('/issues', (req, res) => {
+router.get('/issues', (req, res, next) => {
     console.info('Getting all issues');
-    axios.get(QUERY_URL)
+    axios.get(QUERY_URL, config)
         .then(result => {
             res.status(200).json(result.data);
         })
         .catch(error => {
-            res.status(500).send(error)
+            console.error('Failed getting all jira issues.');
+            next(error);
         });
 });
 
-router.get('/issue/:issueKey', (req, res) => {
+router.get('/issue/:issueKey', (req, res, next) => {
     let issueKey = req.params.issueKey;
     console.info('Getting issue: ', issueKey);
 
@@ -42,13 +43,12 @@ router.get('/issue/:issueKey', (req, res) => {
         })
         .catch(error => {
             console.log('Failed to retrieve issue: ', issueKey);
-            console.log('Error: ', error);
-            res.status(500).send('Error retrieving issue: ', issueKey);
+            next(error);
         });
 });
 
 // Create a new issue
-router.post('/issue', (req, res) => {
+router.post('/issue', (req, res, next) => {
     console.info('Creating new issue');
 
     let description = req.query.description;
@@ -72,10 +72,8 @@ router.post('/issue', (req, res) => {
             } else {
                 console.log('Creating issue failed with response status: ', error.response.status);
             }
-
-            console.log('Error: ', error);
             
-            res.status(500).send('Error creating Jira issue.')
+            next(error);
         });
 });
 

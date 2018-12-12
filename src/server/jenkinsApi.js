@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 });
 
 // Get build information from the main jenkins job
-router.get('/main/job', (req, res) => {
+router.get('/main/job', (req, res, next) => {
   let url = MAIN_JOB_URL_API;
   console.log('Getting ' + url);
   axios.get(url)
@@ -28,12 +28,12 @@ router.get('/main/job', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(error => {
-      res.status(500).send(error)
+      next(error)
     });
 });
 
 // Get build information for a specific build number
-router.get('/main/build/:number', (req, res) => {
+router.get('/main/build/:number', (req, res, next) => {
   let url = MAIN_BASE_URL + '/' + req.params.number + JSON_API;
   console.log('Getting ' + url);
   axios.get(url)
@@ -41,12 +41,12 @@ router.get('/main/build/:number', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(error => {
-      res.status(500).send(error)
+      next(error)
     });
 });
 
 // Get test results from latest main run
-router.get('/main/test_report/latest', (req, res) => {
+router.get('/main/test_report/latest', (req, res, next) => {
   let url = MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API;
   console.log('Getting ' + url);
   axios.get(url)
@@ -57,12 +57,12 @@ router.get('/main/test_report/latest', (req, res) => {
       res.status(200).json(data);
     })
     .catch(error => {
-      res.status(500).send(error)
+      next(error)
     });
 });
 
 // Get test results from specific main run
-router.get('/main/test_report/:buildNumber', (req, res) => {
+router.get('/main/test_report/:buildNumber', (req, res, next) => {
   let url = MAIN_BASE_URL + '/' + req.params.buildNumber + '/testReport' + JSON_API
   console.log('Getting ' + url);
   axios.get(url)
@@ -70,12 +70,12 @@ router.get('/main/test_report/:buildNumber', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(error => {
-      res.status(500).send(error)
+     next(error);
     });
 });
 
 // Get build information from the qa jenkins job
-router.get('/qa/job', (req, res) => {
+router.get('/qa/job', (req, res, next) => {
   let url = QA_JOB_URL_API;
   console.log('Getting ' + url);
   axios.get(url)
@@ -83,12 +83,12 @@ router.get('/qa/job', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(error => {
-      res.status(500).send(error)
+      next(error);
     });
 });
 
 // Get build information for a specific build number
-router.get('/qa/build/:number', (req, res) => {
+router.get('/qa/build/:number', (req, res, next) => {
   let url = QA_BASE_URL + '/' + req.params.number + JSON_API;
   console.log('Getting ' + url);
   axios.get(url)
@@ -96,12 +96,12 @@ router.get('/qa/build/:number', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(error => {
-      res.status(500).send(error)
+      next(error);
     });
 });
 
 // Get test results from latest qa run
-router.get('/qa/test_report/latest', (req, res) => {
+router.get('/qa/test_report/latest', (req, res, next) => {
   let url = QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API;
   console.log('Getting ' + url);
   axios.get(url)
@@ -111,12 +111,12 @@ router.get('/qa/test_report/latest', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(error => {
-      res.status(500).send(error)
+      next(error)
     });
 });
 
 // Get test results from specific qa run
-router.get('/qa/test_report/:buildNumber', (req, res) => {
+router.get('/qa/test_report/:buildNumber', (req, res, next) => {
   let url = QA_BASE_URL + '/' + req.params.buildNumber + '/testReport' + JSON_API
   console.log('Getting ' + url);
   axios.get(url)
@@ -124,7 +124,7 @@ router.get('/qa/test_report/:buildNumber', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(error => {
-      res.status(500).send(error)
+      next(error)
     });
 });
 
