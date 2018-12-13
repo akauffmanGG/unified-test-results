@@ -3,11 +3,17 @@ import JenkinsTestCase from '../jenkins/jenkins-test-case';
 const CONSISTENT_FAIL_NUMBER = 3;
 
 export class TestCaseJobResult {
+    suite: string;
+    case: string;
     age: number;
     failedSince: number;
     status: string;
     errorMessage: string = "";
     recordingLink: string;
+
+    get displayName(): string {
+        return this.suite + ' ' + this.case;
+    }
 
     get isFailure(): boolean {
         return this.status === 'FAILED';
@@ -18,6 +24,8 @@ export class TestCaseJobResult {
     }
 
     constructor(obj: any) {
+        this.suite = obj.suite;
+        this.case = obj.case;
         this.age = obj.age;
         this.failedSince = obj.failedSince;
         this.status = obj.status;
