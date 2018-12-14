@@ -6,8 +6,7 @@
         [rows] = "testReport.displayedRows"
         [footerHeight]="50"
         [scrollbarV]="true"
-        [scrollbarH]="true"
-        columnMode="force"
+        columnMode="flex"
         (activate)="onActivate($event)">
 
         <ngx-datatable-row-detail [rowHeight]="100">
@@ -25,7 +24,7 @@
             </ng-template>
         </ngx-datatable-row-detail>
 
-        <ngx-datatable-column name="Test Case" prop="displayName">
+        <ngx-datatable-column name="Test Case" prop="displayName" [flexGrow]="3">
             <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
                 <a href="http://tcdb.inin.com/phaster/#/testcases/{{row.caseNumber}}" target="_blank">{{value}}</a>
              </ng-template>
@@ -34,12 +33,13 @@
         <ngx-datatable-column
             name="QA Status"
             prop="qaResult.status"
-            [cellClass]="statusCellClass">
+            [cellClass]="statusCellClass"
+            [flexGrow]="1">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="QA Age" prop="qaResult.age"></ngx-datatable-column>
+        <ngx-datatable-column name="QA Age" prop="qaResult.age" [flexGrow]="1"></ngx-datatable-column>
 
-        <ngx-datatable-column name="QA History" prop="qaHistory" [comparator]="historyComparator">
+        <ngx-datatable-column name="QA History" prop="qaHistory" [comparator]="historyComparator" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
                 <test-case-history [history]="value"></test-case-history>
             </ng-template>
@@ -48,19 +48,21 @@
         <ngx-datatable-column
             name="Main Status"
             prop="mainResult.status"
-            [cellClass]="statusCellClass">
+            [cellClass]="statusCellClass"
+            [flexGrow]="1">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Main Age" prop="mainResult.age"></ngx-datatable-column>
+        <ngx-datatable-column name="Main Age" prop="mainResult.age" [flexGrow]="1"></ngx-datatable-column>
 
-        <ngx-datatable-column name="Main History" prop="mainHistory" [comparator]="historyComparator">
+        <ngx-datatable-column name="Main History" prop="mainHistory" [comparator]="historyComparator" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
                 <test-case-history [history]="value"></test-case-history>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Team" prop="team.displayName"></ngx-datatable-column>
-        <ngx-datatable-column name="SCR" prop="jiraIssue" [cellClass]="scrCellClass" [comparator]="scrComparator">
+        <ngx-datatable-column name="Team" prop="team.displayName" [flexGrow]="2"></ngx-datatable-column>
+
+        <ngx-datatable-column name="SCR" prop="jiraIssue" [cellClass]="scrCellClass" [comparator]="scrComparator" [flexGrow]="5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <a *ngIf="value" href="https://devjira.inin.com/browse/{{value.key}}" target="_blank">{{value.key}}</a>
 
