@@ -64,7 +64,7 @@
 
         <ngx-datatable-column name="SCR" prop="jiraIssue" [cellClass]="scrCellClass" [comparator]="scrComparator" [flexGrow]="5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="value" href="https://devjira.inin.com/browse/{{value.key}}" target="_blank">{{value.key}}</a>
+                <jira-issue-summary *ngIf="value" [issue]="value"></jira-issue-summary>
 
                 <button
                     *ngIf="row.needsJiraIssue"

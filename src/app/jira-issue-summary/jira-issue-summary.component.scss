@@ -1,0 +1,25 @@
+@import "../style/variables.scss";
+
+$overlap: 20px;
+
+.jira-issue-summary-component {
+
+    .issue-key {
+        padding-right: $overlap;
+        border: 1px solid darken($info, 10%);
+    }
+
+    .issue-status {
+        margin-left: -($overlap - 4px);
+        
+        &.badge-light {
+            border: 1px solid darken($light, 10%);
+        }
+
+        &.badge-success {
+            border: 1px solid darken($success, 10%);
+        }
+    }
+
+    
+}

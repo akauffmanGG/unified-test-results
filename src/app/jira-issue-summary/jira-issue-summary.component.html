@@ -1,0 +1,7 @@
+<span class="jira-issue-summary-component">
+    <span class="issue-key badge badge-info badge-pill">
+        <a href="https://devjira.inin.com/browse/{{issue.key}}" target="_blank">{{ issue.key }} </a>
+        <span *ngIf="issue.assigneeDisplayName" >- {{ issue.assigneeDisplayName }} </span>
+    </span>
+    <span [ngClass]="['issue-status', 'badge', 'badge-pill', isInProgress() ? 'badge-success' : 'badge-light']">{{ issue.statusName }}</span>
+</span>

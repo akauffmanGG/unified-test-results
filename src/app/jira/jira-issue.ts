@@ -7,12 +7,19 @@ export class JiraIssue {
     summary: string;
     testCase: string;
     testCases: string[] = [];
+    statusName: string = '';
+    assigneeDisplayName: string = '';
 
     constructor(obj: any) {
         this.id = obj.id;
         this.key = obj.key;
         this.self = obj.self;
         this.summary = obj.fields.summary;
+        this.statusName = obj.fields.status.name;
+
+        if(obj.fields.assignee) {
+            this.assigneeDisplayName = obj.fields.assignee.displayName;
+        }
 
         let match;
         while((match = JiraIssue.TEST_CASE_REGEX.exec(obj.fields.customfield_10073)) != null) {

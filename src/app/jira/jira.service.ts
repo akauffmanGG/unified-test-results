@@ -14,7 +14,8 @@ export class JiraService {
         return this.http.get<JiraQuery>('api/jira/issues').toPromise()
             .then(response => {
                 return new JiraQuery(response);
-            }, this.handleError);
+            }, this.handleError)
+            .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {
