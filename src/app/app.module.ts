@@ -36,6 +36,6 @@ import { JiraIssueSummaryComponent } from './jira-issue-summary/jira-issue-summa
   ],
 
   providers: [],
-  bootstrap: [AppComponent, ErrorHistoryModalComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
