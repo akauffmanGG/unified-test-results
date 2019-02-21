@@ -1,4 +1,7 @@
 export default class JenkinsTestCase {
+    private static readonly TEST_CASE_REGEX = new RegExp('TC\\d{5}', 'i');
+    private static readonly TEST_SUITE_REGEX = new RegExp('TS\\d{4}', 'i');
+
     age: number;
     className: string;
     failedSince: number;
@@ -18,11 +21,16 @@ export default class JenkinsTestCase {
         this.errorDetails = obj.errorDetails;
         this.errorStackTrace = obj.errorStackTrace;
 
-        let classNameParts: string[] = this.className.split('.');
-        //The suite and test case are always the last two parts of the class name.
-        if(classNameParts.length >= 2) {
-            this.suite = classNameParts[classNameParts.length -2];
-            this.case = classNameParts[classNameParts.length -1];
+        let anyName = this.className + this.name;
+        let match = JenkinsTestCase.TEST_CASE_REGEX.exec(anyName);
+        if(match) {
+            this.case = match[0];
         }
+
+        match = JenkinsTestCase.TEST_SUITE_REGEX.exec(anyName);
+        if(match) {
+            this.suite = match[0];
+        }
+
     }
 }

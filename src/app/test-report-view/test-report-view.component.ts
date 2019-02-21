@@ -119,17 +119,17 @@ export class TestReportViewComponent implements OnInit {
     }
 
     private mergeResults(qaResults: TestCaseResult[], mainResults: TestCaseResult[]): TestCaseResult[] {
-        let mainResultMap = _.keyBy(mainResults, (result: TestCaseResult) => result.className);
-        let qaResultMap = _.keyBy(qaResults, (result: TestCaseResult) => result.className);
+        let mainResultMap = _.keyBy(mainResults, (result: TestCaseResult) => result.displayName);
+        let qaResultMap = _.keyBy(qaResults, (result: TestCaseResult) => result.displayName);
 
         let mergedResults = _.unionWith(qaResults, mainResults, (arrVal: TestCaseResult, othVal: TestCaseResult) => {
-            return arrVal.suite === othVal.suite && arrVal.case === othVal.case;
+            return arrVal.displayName === othVal.displayName;
         });
 
         _.forEach(mergedResults, (mergedResult: TestCaseResult) => {
-            if (mainResultMap[mergedResult.className] && qaResultMap[mergedResult.className]) {
-                let mainResult: TestCaseResult = mainResultMap[mergedResult.className];
-                let qaResult: TestCaseResult = qaResultMap[mergedResult.className];
+            if (mainResultMap[mergedResult.displayName] && qaResultMap[mergedResult.displayName]) {
+                let mainResult: TestCaseResult = mainResultMap[mergedResult.displayName];
+                let qaResult: TestCaseResult = qaResultMap[mergedResult.displayName];
 
                 mergedResult.merge(mainResult);
                 mergedResult.merge(qaResult);
@@ -142,14 +142,16 @@ export class TestReportViewComponent implements OnInit {
     private addHistory(historicalResults: JenkinsTestReport[], jobType:JenkinsJobEnum): void {
         // Create list of maps of class name to result
         let resultsMapList = _.map(historicalResults, (testReport:JenkinsTestReport) => {
-            return _.keyBy(testReport.testCases, (result: TestCaseResult) => result.className);
+            return _.keyBy(testReport.testCases, (result: TestCaseResult) => result.suite + " " + result.case);
         });
 
         //iterate through testCaseResults
         _.map(this.testCaseResults, (testCaseResult: TestCaseResult) => {
             _.map(resultsMapList, (resultMap:any) => {
-                if(resultMap[testCaseResult.className]) {
-                    let result:TestCaseJobResult = new TestCaseJobResult(resultMap[testCaseResult.className]);
+                let key = testCaseResult.suite + " " + testCaseResult.case;
+
+                if(resultMap[key]) {
+                    let result:TestCaseJobResult = new TestCaseJobResult(resultMap[key]);
 
                     if(jobType === JenkinsJobEnum.MAIN) {
                         testCaseResult.addMainHistory(result);

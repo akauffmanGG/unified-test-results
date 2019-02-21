@@ -17,6 +17,6 @@ export default class JenkinsTestReport {
         this.url = obj.url;
 
         let suites : any[] = obj.suites;
-        this.testCases = _.map(suites, suite => new JenkinsTestCase( suite.cases[0] ) );
+        this.testCases = _.flatten(_.map(suites, suite => _.map(suite.cases, testCase => new JenkinsTestCase( testCase ) ) ) );
     }
 }
