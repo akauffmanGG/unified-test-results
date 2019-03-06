@@ -51,7 +51,7 @@ export class TestCaseJobResult {
             .replace('ININ.Testing.Automation.Core.TraceTrueException :', '')
             .replace('ININ.Testing.Automation.ManagedICWS.NegativeICWSResponseException :', '')
             .replace(/---- OpenQA\.Selenium\.WebDriverTimeoutException : Timed out after \d* seconds/g, '')
-            .replace(/(\\n?recording:\s)(http:.*mp4)(\\r\\n)?/gi, (match, group1, group2):string => {
+            .replace(/(\n?recording:\s)(http:.*mp4)(\r\n)?/gi, (match, group1, group2):string => {
                 this.recordingLink = group2;
                 
                 return '';
