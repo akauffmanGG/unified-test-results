@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import { JenkinsJob } from './jenkins-job';
-import { JenkinsMultiBranchJob } from './jenkins-multibranch-job';
 import { JenkinsBuild } from './jenkins-build';
 import JenkinsTestReport from './jenkins-test-report';
 import JenkinsJobEnum from './jenkins-job-enum';
@@ -34,17 +33,6 @@ export class JenkinsService {
             }).catch(this.handleError);
     };
 
-    getIcatJob() : Promise<JenkinsMultiBranchJob> {
-        let url = this.getApiPrefix(JenkinsJobEnum.ICAT) + '/job';
-
-        return this.http.get(url)
-            .toPromise()
-            .then(response => {
-                console.log('Get Icat Job completed successfully');
-                return new JenkinsMultiBranchJob(response);
-            }).catch(this.handleError);
-    };
-
     getLatestTestReport(jobType: JenkinsJobEnum): Promise<JenkinsTestReport> {
         let url = this.getApiPrefix(jobType) + '/test_report/latest';
 
@@ -54,26 +42,6 @@ export class JenkinsService {
                 console.log('Get Last Completed Test Report completed successfully');
                 return new JenkinsTestReport(response);
             }).catch(this.handleError);
-    }
-
-    getAllMutlibranchJobs() : void {
-        let multibranchJob: Promise<JenkinsMultiBranchJob>; 
-        let regularJob: Promise<JenkinsJob>;
-        let jobs: Promise<any[]>;
-        multibranchJob =  this.getIcatJob();
-
-        multibranchJob.then((result) => {
-            result.jobs.forEach((job) => {
-                console.log()
-            })
-            console.log(result.jobs)
-        })
-        
-
-        // let builds: any = regularJob.then((job: JenkinsJob) => {
-        //     return job.builds;
-        // });
-        // console.log('multibranch jobs = '+multibranchJob.jobs);
     }
 
     // Get test reports for the defined number of prior runs
@@ -117,8 +85,6 @@ export class JenkinsService {
             return '/api/jenkins/main';
         } else if (jobType == JenkinsJobEnum.QA) {
             return '/api/jenkins/qa';
-        } else if (jobType == JenkinsJobEnum.ICAT) {
-            return '/api/jenkins/icat'
         } else {
             console.error('Invalid job parameter');
         }

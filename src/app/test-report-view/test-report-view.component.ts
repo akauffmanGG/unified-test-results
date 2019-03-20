@@ -47,9 +47,6 @@ export class TestReportViewComponent implements OnInit {
         this.loading = true;
         this.testReport = new TestReport();
 
-
-        
-
         this.jenkinsService.getLatestTestReport(JenkinsJobEnum.QA).then(testReport => {
             this.testReport.qaReportUrl = testReport.url;
             return _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.QA));
@@ -62,6 +59,7 @@ export class TestReportViewComponent implements OnInit {
         }).then(() => {
             this.addTeamsToResults();
             this.testReport.displayedRows = this.testCaseResults;
+
             let promises : Promise<any>[] = [
                 this.addJiraIssues(),
 
@@ -78,9 +76,7 @@ export class TestReportViewComponent implements OnInit {
 
             return Promise.all(promises);
 
-        }).then(() => { 
-            this.loading = false; 
-        }) //Ugh, no finally block. Seriously?
+        }).then(() => { this.loading = false; }) //Ugh, no finally block. Seriously?
         .catch(() => {
             this.loading = false;
         });

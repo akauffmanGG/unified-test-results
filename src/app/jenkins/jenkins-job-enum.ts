@@ -1,7 +1,6 @@
 enum JenkinsJobEnum {
     QA = 'QA',
-    MAIN = 'MAIN',
-    ICAT = 'ICAT'
+    MAIN = 'MAIN'
 }
 
 export default JenkinsJobEnum;
