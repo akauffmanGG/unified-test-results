@@ -44,24 +44,14 @@ export class TestReportViewComponent implements OnInit {
     }
 
     getTestReport(): void {
-        // console.log('zak was here');
-        // this.loading = true;
-        // this.testReport = new TestReport();
+        this.loading = true;
+        this.testReport = new TestReport();
 
-
-        // this.jenkinsService.getAllMutlibranchJobs();
-        // this.jenkinsService.getQaJob();
-        // this.jenkinsService.getQaJob().then((result) => {
-        //     console.log(result.lastBuild);
-        // });
 
         
 
         this.jenkinsService.getLatestTestReport(JenkinsJobEnum.QA).then(testReport => {
-            console.log(this.testReport);
             this.testReport.qaReportUrl = testReport.url;
-            console.log('breakpoint here 1');
-            console.log(this.testReport.qaReportUrl);
             return _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.QA));
         }).then((qaResults: TestCaseResult[]) => {
             return this.jenkinsService.getLatestTestReport(JenkinsJobEnum.MAIN).then(testReport => {
@@ -72,9 +62,8 @@ export class TestReportViewComponent implements OnInit {
         }).then(() => {
             this.addTeamsToResults();
             this.testReport.displayedRows = this.testCaseResults;
-            console.log('breakpoint here 2');
             let promises : Promise<any>[] = [
-                // this.addJiraIssues(),
+                this.addJiraIssues(),
 
                 this.jenkinsService.getHistoricalReports(JenkinsJobEnum.QA)
                 .then(results => {
@@ -91,7 +80,6 @@ export class TestReportViewComponent implements OnInit {
 
         }).then(() => { 
             this.loading = false; 
-            console.log('breakpoint here 3');
         }) //Ugh, no finally block. Seriously?
         .catch(() => {
             this.loading = false;
