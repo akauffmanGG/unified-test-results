@@ -1,27 +1,34 @@
-# AutomationFailures
+# Unified Test Results
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.9.
+A combined view of QA and Main test results for Interaction Connect.
 
-## Development server
+Allows you to:
+<ul>
+<li>Compare pass/fail results of QA and Main tests side by side</li>
+<li>Filter results by a variety of parameters including test name, status, and error message.</li>
+<li>See the history of the last 10 runs of a test along with the failure reason for any particular failure.</li>
+<li>Sort by any field including history fields which will order by flappiness (alternating between pass and fail).</li>
+<li>Link to test recording in the returned error message.</li>
+<li>Create SCRs with appropriate information for any test that has been failing consistently</li>
+</ul>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Environment Setup
 
-## Code scaffolding
+`npm install package-lock.json` to install the correct dependencies for the application.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Create `JIRA_USER` and `JIRA_PASSWORD` environment variables with appropriate credentials for viewing and creating Jira SCRs.
 
-## Build
+Create `PORT` environment variable to change the server port. Otherwise it will default to 3001.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## Running Locally
 
-## Running unit tests
+This application relies webpack to build the application and node to serve it.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Starting node server
 
-## Running end-to-end tests
+From unified-test-results directory run `node src/server/server.js`
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Build the application
 
-## Further help
+From unified-test-results directory run `npm run build` to build the application and watch for changes.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
