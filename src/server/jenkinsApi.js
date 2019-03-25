@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-const QA_BASE_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression';
+const QA_BASE_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/webic-icat/job/client.test.2019r2_systest';
 const MAIN_BASE_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/webic-icat/job/client.test.latest_systest';
 const JSON_API = '/api/json';
 const LAST_SUCCESSFUL_ROUTE = '/lastSuccessfulBuild/testReport';
@@ -13,6 +13,7 @@ const QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API = QA_BASE_URL + LAST_SUCCESSFUL_ROU
 const MAIN_JOB_URL_API = MAIN_BASE_URL + JSON_API;
 const MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE;
 const MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
+
 
 /* GET api listing. */
 router.get('/', (req, res) => {
