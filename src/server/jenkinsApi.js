@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-const WEBIC_ICAT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/webic-icat/api/json'
+const WEBIC_ICAT_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/webic-icat/'
 const MAIN_BASE_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/webic-icat/job/client.test.latest_systest/';
 const JSON_API = 'api/json';
 const LAST_SUCCESSFUL_ROUTE = 'lastSuccessfulBuild/testReport/';
@@ -11,37 +11,30 @@ const MAIN_JOB_URL_API = MAIN_BASE_URL + JSON_API;
 const MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE;
 const MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
 
-let QA_BASE_URL = 'http://ci.qfun.com:8080/job/pureconnect/job/interaction_connect/job/connect_cic_regression/';
-let QA_JOB_URL_API = QA_BASE_URL + JSON_API;
-let QA_LAST_SUCCESSFUL_TEST_REPORT_URL = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE;
-let QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
-
-let jobList = [];
-
-let getIcatJobs = () => {
-    return axios.get(WEBIC_ICAT_URL).then((result) => {
-        result.data.jobs.forEach( (job) => {
-            jobList.push(job);
-        });
-    });
-};
+const WEBIC_ICAT_URL_API = WEBIC_ICAT_URL + JSON_API;
 
 let getQAJobUrl = () => {
     let qaRegex = new RegExp('client\.test\.([0-9]*)r([0-9])_systest');
     let qaJob;
     let currentYear = 0;
     let currentRelease = 0;
-    return getIcatJobs().then(() => {
+    return axios.get(WEBIC_ICAT_URL_API).then((result) => {
+        return result.data.jobs;
+    }).then((jobList) => {
         jobList.forEach((job) => {
             let result = job.name.match(qaRegex);
             if (result && result[1] >= currentYear && result[2] >= currentRelease) {
                 qaJob = job;
+                currentYear = result[1];
+                currentRelease = result[2];
             }
         });
-        QA_BASE_URL = qaJob.url;
-        QA_JOB_URL_API = QA_BASE_URL + JSON_API;
-        QA_LAST_SUCCESSFUL_TEST_REPORT_URL = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE;
-        QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API = QA_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
+        return {
+            qaBaseUrl: qaJob.url,
+            qaJobUrl: qaJob.url + JSON_API,
+            qaLastSuccessfulTestReportUrl: qaJob.url + LAST_SUCCESSFUL_ROUTE,
+            qaLastSuccessfulTestReportUrlApi: qaJob.url + LAST_SUCCESSFUL_ROUTE + JSON_API
+        }
     });
 };
 
@@ -99,69 +92,65 @@ router.get('/main/test_report/:buildNumber', (req, res, next) => {
 
 // Get build information from the qa jenkins job
 router.get('/qa/job', (req, res, next) => {
-    getQAJobUrl().then(() => {
-        let url = QA_JOB_URL_API;
+    getQAJobUrl().then((urlObj) => {
+        let url = urlObj.qaJobUrl;
         console.log('Getting ' + url);
         return url;
-    }).then( (url) => {
-        axios.get(url).then(result => {
-            res.status(200).json(result.data);
-        }).catch(error => {
-            next(error);
-        })
-    })
+    }).then(url => {
+        return axios.get(url)
+    }).then(result => {
+        res.status(200).json(result.data);
+    }).catch(error => {
+        next(error);
+    });
 });
 
 // Get build information for a specific build number
 router.get('/qa/build/:number', (req, res, next) => {
-    getQAJobUrl().then(() => {
-        let url = QA_BASE_URL + req.params.number + '/' + JSON_API;
+    getQAJobUrl().then((urlObj) => {
+        let url = urlObj.qaBaseUrl + req.params.number + '/' + JSON_API;
         console.log('Getting ' + url);
         return url;
-    }).then((url) => {
-        axios.get(url).then(result => {
-            res.status(200).json(result.data);
-        }).catch(error => {
-            next(error);
-        })
+    }).then(url => {
+        return axios.get(url)
+    }).then(result => {
+        res.status(200).json(result.data);
     }).catch(error => {
-        next(error)
-    })
+        next(error);
+    });
 });
 
 // Get test results from latest qa run
 router.get('/qa/test_report/latest', (req, res, next) => {
-    getQAJobUrl().then(() => {
-        let url = QA_LAST_SUCCESSFUL_TEST_REPORT_URL_API;
+    let lastSuccessfulTestReport;
+    getQAJobUrl().then((urlObj) => {
+        let url = urlObj.qaLastSuccessfulTestReportUrlApi;
+        lastSuccessfulTestReport = urlObj.qaLastSuccessfulTestReportUrl
         console.log('Getting ' + url); 
         return url;
-    }).then((url) => {
-        axios.get(url).then(result => {
-            result.data.url = QA_LAST_SUCCESSFUL_TEST_REPORT_URL;
-            res.status(200).json(result.data);
-        }).catch(error => {
-            next(error)
-        })
+    }).then(url => {
+        return axios.get(url)
+    }).then(result => {
+        result.data.url = lastSuccessfulTestReport;
+        res.status(200).json(result.data);
     }).catch(error => {
-        next(error)
-    })
+        next(error);
+    });
 });
 
 // Get test results from specific qa run
 router.get('/qa/test_report/:buildNumber', (req, res, next) => {
-    getQAJobUrl().then(() => {
-        let url = QA_BASE_URL + req.params.buildNumber + '/testReport/' + JSON_API
+    getQAJobUrl().then((urlObj) => {
+        let url = urlObj.qaBaseUrl + req.params.buildNumber + '/testReport/' + JSON_API
         console.log('Getting ' + url);
         return url;
-    }).then((url) => {
-        axios.get(url).then(result => {
-            res.status(200).json(result.data);
-        }).catch(error => {
-            next(error)
-        })
+    }).then(url => {
+        return axios.get(url)
+    }).then(result => {
+        res.status(200).json(result.data);
     }).catch(error => {
-        next(error)
-    })
+        next(error);
+    });
 });
 
 module.exports = router;
