@@ -30,5 +30,5 @@ From unified-test-results directory run `node src/server/server.js`
 
 ### Build the application
 
-From unified-test-results directory run `npm run build` to build the application and watch for changes.
+From unified-test-results directory run `npm run build` to build the application and watch for changes. It will default to localhost:3001.
 
