@@ -179,13 +179,13 @@ export class TestReportViewComponent implements OnInit {
 
         this.jenkinsService.getMainJob()
         .then((mainJob: JenkinsJob) => {
-            this.testReport.mainSuccessTrend = mainJob.lastCompletedBuild.number - mainJob.lastUnsuccessfulBuild.number;
+            this.testReport.mainSuccessTrend = mainJob.lastCompletedBuild.number - (mainJob.lastUnsuccessfulBuild ? mainJob.lastUnsuccessfulBuild.number : 0);
             this.testReport.mainFailTrend = mainJob.lastCompletedBuild.number - mainJob.lastSuccessfulBuild.number;
         });
 
         this.jenkinsService.getQaJob()
         .then((qaJob: JenkinsJob) => {
-            this.testReport.qaSuccessTrend = qaJob.lastCompletedBuild.number - qaJob.lastUnsuccessfulBuild.number;
+            this.testReport.qaSuccessTrend = qaJob.lastCompletedBuild.number - (qaJob.lastUnsuccessfulBuild ? qaJob.lastUnsuccessfulBuild.number : 0);
             this.testReport.qaFailTrend = qaJob.lastCompletedBuild.number - qaJob.lastSuccessfulBuild.number;
         });
     }

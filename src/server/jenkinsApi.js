@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+
 const JENKINS_BASE_URL = 'http://ci.qfun.com:8080/';
 const CONNECT_JOB = 'job/pureconnect/job/interaction_connect/';
 const ICAT_JOB = 'job/webic-icat/';
 const MAIN_JOB = 'job/client.test.latest_systest/';
 const JSON_API = 'api/json';
 const LAST_SUCCESSFUL_ROUTE = 'lastSuccessfulBuild/testReport/';
+
 
 const WEBIC_ICAT_URL = JENKINS_BASE_URL + CONNECT_JOB + ICAT_JOB;
 const WEBIC_ICAT_URL_API = WEBIC_ICAT_URL + JSON_API;
