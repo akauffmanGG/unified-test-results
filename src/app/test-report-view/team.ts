@@ -13,9 +13,10 @@ class TeamInstance implements Team {
     }
 }
 
+export const AtomicTangerineTeam = new TeamInstance('Atomic Tangerine', 'atomic_tangerine_team');
 export const BlueTeam = new TeamInstance('Blue', 'blue_team');
 export const LaserLemonTeam = new TeamInstance('Laser Lemon', 'laser_lemon_team');
 export const IndigoTeam = new TeamInstance('Indigo', 'indigo_team');
 export const PeachPuffTeam = new TeamInstance('Peach Puff', 'peach_puff_team');
 export const MissingTeam = new TeamInstance('None', 'missing_delivery_team');
-export const Teams: Team[] = [BlueTeam, LaserLemonTeam, IndigoTeam, PeachPuffTeam, MissingTeam];
+export const Teams: Team[] = [AtomicTangerineTeam, BlueTeam, LaserLemonTeam, IndigoTeam, PeachPuffTeam, MissingTeam];

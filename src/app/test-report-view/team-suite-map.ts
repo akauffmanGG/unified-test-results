@@ -1,7 +1,9 @@
-import {BlueTeam, LaserLemonTeam, IndigoTeam, PeachPuffTeam} from './team';
+import {AtomicTangerineTeam, BlueTeam, LaserLemonTeam, IndigoTeam, PeachPuffTeam} from './team';
 
 const teamSuiteMap = new Map([
-    ['TS1872', BlueTeam]
+    ['TS4134', AtomicTangerineTeam]
+    , ['TS4135', AtomicTangerineTeam]
+    , ['TS1872', BlueTeam]
     , ['TS1879', BlueTeam]
     , ['TS2049', BlueTeam]
     , ['TS2050', BlueTeam]
@@ -23,7 +25,6 @@ const teamSuiteMap = new Map([
     , ['TS3976', BlueTeam]
     , ['TS3977', BlueTeam]
     , ['TS3978', BlueTeam]
-    , ['TS4134', BlueTeam]
     , ['TS4180', BlueTeam]
     , ['TS1880', LaserLemonTeam]
     , ['TS1881', LaserLemonTeam]
