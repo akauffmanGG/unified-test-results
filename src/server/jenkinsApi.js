@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 
 
-const JENKINS_BASE_URL = 'http://ci.qfun.com:8080/';
+const JENKINS_BASE_URL = 'https://ci.qfun.com/';
 const CONNECT_JOB = 'job/pureconnect/job/interaction_connect/';
 const ICAT_JOB = 'job/webic-icat/';
 const MAIN_JOB = 'job/client.test.latest_systest/';
@@ -18,6 +18,9 @@ const MAIN_BASE_URL = WEBIC_ICAT_URL + MAIN_JOB;
 const MAIN_JOB_URL_API = MAIN_BASE_URL + JSON_API;
 const MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE;
 const MAIN_LAST_SUCCESSFUL_TEST_REPORT_URL_API = MAIN_BASE_URL + LAST_SUCCESSFUL_ROUTE + JSON_API;
+
+// Ignore Jenkins self signed certificate
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 function getQAJobUrl() {
     let qaRegex = new RegExp('client\.test\.([0-9]*)r([0-9])_systest');
