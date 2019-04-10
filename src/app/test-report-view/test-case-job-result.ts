@@ -46,12 +46,13 @@ export class TestCaseJobResult {
 
         let message = errorDetails.split('+++')[0];
         message = message
-            .replace(/\n/g, '')
-            .replace(/\s{2,}/g,'')
-            .replace('ININ.Testing.Automation.Core.TraceTrueException :', '')
-            .replace('ININ.Testing.Automation.ManagedICWS.NegativeICWSResponseException :', '')
-            .replace(/---- OpenQA\.Selenium\.WebDriverTimeoutException : Timed out after \d* seconds/g, '')
-            .replace(/(\n?recording:\s)(http:.*mp4)(\r\n)?/gi, (match, group1, group2):string => {
+            .replace(/(\n|\\n)/g, ' ') //Replace new lines or escaped new lines
+            .replace(/(\r|\\r)/g, ' ') //Replace line feeds or escaped line feeds
+            .replace(/\s{2,}/g,' ') //Replace extra whitespace
+            .replace('ININ.Testing.Automation.Core.TraceTrueException :', '') //Replace common exception types
+            .replace('ININ.Testing.Automation.ManagedICWS.NegativeICWSResponseException :', '') //Replace common exception types
+            .replace(/---- OpenQA\.Selenium\.WebDriverTimeoutException : Timed out after \d* seconds/g, '') //Replace common stack messages
+            .replace(/(recording:\s)(http:.*mp4)?/gi, (match, group1, group2):string => { //match recording link
                 this.recordingLink = group2;
                 
                 return '';
