@@ -21,6 +21,7 @@ export class TestReportFilterComponent implements OnInit {
     teams: Team[] = Teams;
     selectedTeams: Team[] = Teams;
     selectedScr: string = 'ALL';
+    selectedPriorities: string[] = ['P1', 'P2', 'P3', 'P4'];
     findScr: string;
     findTestCase: string;
     findErrorMessage: string;
@@ -46,7 +47,8 @@ export class TestReportFilterComponent implements OnInit {
                 this.isFilteredToScr(result) &&
                 this.isSearchedScr(result) &&
                 this.isSearchedTestCase(result) &&
-                this.isSearchedErrorMessage(result);
+                this.isSearchedErrorMessage(result) && 
+                this.isFilteredToPriority(result);
         });
     }
 
@@ -140,6 +142,14 @@ export class TestReportFilterComponent implements OnInit {
         return false;
     }
 
+    private isFilteredToPriority(result: TestCaseResult): boolean {
+        if(_.indexOf(this.selectedPriorities, result.priority) > -1) {
+            return true;
+        }
+
+        return false;
+    }
+
     clearFilters(): void {
         this.selectedQaStatus = 'ALL';
         this.selectedMainStatus = 'ALL';
@@ -148,6 +158,7 @@ export class TestReportFilterComponent implements OnInit {
         this.findScr = '';
         this.findTestCase = '';
         this.findErrorMessage = '';
+        this.selectedPriorities = ['P1', 'P2', 'P3', 'P4'];
 
         this.filterRows();
     }

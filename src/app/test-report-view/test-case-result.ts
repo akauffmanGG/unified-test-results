@@ -1,7 +1,7 @@
-import JenkinsTestCase from '../jenkins/jenkins-test-case';
-import JenkinsJobEnum from '../jenkins/jenkins-job-enum';
+import JenkinsTestCase from '../services/jenkins/jenkins-test-case';
+import JenkinsJobEnum from '../services/jenkins/jenkins-job-enum';
 
-import { JiraIssue } from '../jira/jira-issue';
+import { JiraIssue } from '../services/jira/jira-issue';
 
 import { Team, MissingTeam } from './team';
 import { TestCaseJobResult } from './test-case-job-result';
@@ -15,6 +15,7 @@ export default class TestCaseResult {
     suite: string;
     case: string;
     team: Team;
+    priority: string;
     qaResult: TestCaseJobResult;
     qaHistory: TestCaseJobResult[] = [];
     mainResult: TestCaseJobResult;

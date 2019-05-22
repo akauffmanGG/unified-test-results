@@ -1,15 +1,16 @@
 import _ from 'lodash';
 import { Component, OnInit } from '@angular/core';
-import { JenkinsService } from '../jenkins/jenkins.service';
-import { JiraService } from '../jira/jira.service';
+import { JenkinsService } from '../services/jenkins/jenkins.service';
+import { JiraService } from '../services/jira/jira.service';
+import { TcdbService } from '../services/tcdb/tcdb.service';
 import { FilterResults } from './filter-results';
 
-import JenkinsTestReport from '../jenkins/jenkins-test-report';
-import JenkinsJobEnum from '../jenkins/jenkins-job-enum';
-import { JenkinsJob } from '../jenkins/jenkins-job';
+import JenkinsTestReport from '../services/jenkins/jenkins-test-report';
+import JenkinsJobEnum from '../services/jenkins/jenkins-job-enum';
+import { JenkinsJob } from '../services/jenkins/jenkins-job';
 
-import { JiraQuery } from '../jira/jira-query';
-import { JiraIssue } from '../jira/jira-issue';
+import { JiraQuery } from '../services/jira/jira-query';
+import { JiraIssue } from '../services/jira/jira-issue';
 
 import TestCaseResult from './test-case-result';
 import { TestReport } from './test-report';
@@ -23,7 +24,7 @@ import { promise } from 'protractor';
     selector: 'test-report-view',
     templateUrl: './test-report-view.component.html',
     styleUrls: ['./test-report-view.component.scss'],
-    providers: [JenkinsService, JiraService, FilterResults]
+    providers: [JenkinsService, JiraService, TcdbService, FilterResults]
 })
 export class TestReportViewComponent implements OnInit {
 
@@ -37,7 +38,7 @@ export class TestReportViewComponent implements OnInit {
     showFixedIssues: boolean = false;
     loading: boolean = false;
 
-    constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private filterResults: FilterResults) {
+    constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private tcdbService: TcdbService, private filterResults: FilterResults) {
     }
 
     ngOnInit() {
@@ -60,8 +61,15 @@ export class TestReportViewComponent implements OnInit {
             this.addTeamsToResults();
             this.testReport.displayedRows = this.testCaseResults;
 
+            let cases: String[] = _.map(this.testCaseResults, 'caseNumber');
+
             let promises : Promise<any>[] = [
                 this.addJiraIssues(),
+
+                this.tcdbService.getTestCasePriorities(cases)
+                .then(results => {
+                    this.addPriorities(results);
+                }),
 
                 this.jenkinsService.getHistoricalReports(JenkinsJobEnum.QA)
                 .then(results => {
@@ -163,6 +171,18 @@ export class TestReportViewComponent implements OnInit {
             });
         })
 
+    }
+
+    private addPriorities(priorities: [{ TestCaseId : String, Priority : String }] ) : void {
+        let priorityMap = _.keyBy( priorities, 'TestCaseId');
+
+        this.testCaseResults.forEach( (testCaseResult: TestCaseResult) => {
+            let priorityRecord = priorityMap[testCaseResult.caseNumber];
+
+            if(priorityRecord) {
+                testCaseResult.priority = priorityRecord.Priority;
+            }
+        });
     }
 
     private addTeamsToResults(): void {

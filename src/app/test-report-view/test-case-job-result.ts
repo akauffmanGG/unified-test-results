@@ -1,4 +1,4 @@
-import JenkinsTestCase from '../jenkins/jenkins-test-case';
+import JenkinsTestCase from '../services/jenkins/jenkins-test-case';
 
 const CONSISTENT_FAIL_NUMBER = 3;
 

@@ -32,6 +32,7 @@
     "jquery": "^3.3.1",
     "less": "^2.7.3",
     "lodash": "^4.17.11",
+    "mssql": "^5.1.0",
     "ngx-loading": "^1.0.15",
     "node-sass": "^4.9.4",
     "popper.js": "^1.14.4",
