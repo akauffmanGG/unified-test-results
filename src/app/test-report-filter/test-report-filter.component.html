@@ -16,46 +16,24 @@
         </select>
     </div>
 
-    <label>QA Status</label>
+    <label>Status</label>
     <fieldset class="form-group">
         <div class="form-check form-check-inline">
             <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="qaStatusSelect" id="qaStatusAll" value="ALL" selected (change)="filterRows()" [(ngModel)]="selectedQaStatus">
+                    <input type="radio" class="form-check-input" name="statusSelect" id="statusAll" value="ALL" selected (change)="filterRows()" [(ngModel)]="selectedStatus">
                     All
             </label>
         </div>
         <div class="form-check form-check-inline">
             <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="qaStatusSelect" id="qaStatusFailed" value="FAILED" (change)="filterRows()" [(ngModel)]="selectedQaStatus">
+                    <input type="radio" class="form-check-input" name="statusSelect" id="statusFailed" value="FAILED" (change)="filterRows()" [(ngModel)]="selectedStatus">
                     Failed
             </label>
         </div>
         <div class="form-check form-check-inline">
             <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="qaStatusSelect" id="qaStatusPassed" value="PASSED" (change)="filterRows()" [(ngModel)]="selectedQaStatus">
+                    <input type="radio" class="form-check-input" name="statusSelect" id="statusPassed" value="PASSED" (change)="filterRows()" [(ngModel)]="selectedStatus">
                     Passed
-            </label>
-        </div>
-    </fieldset>
-
-    <label>Main Status</label>
-    <fieldset class="form-group">
-        <div class="form-check form-check-inline">
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="mainStatusSelect" id="mainStatusAll" value="ALL" selected (change)="filterRows()" [(ngModel)]="selectedMainStatus">
-                All
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="mainStatusSelect" id="mainStatusFailed" value="FAILED" (change)="filterRows()" [(ngModel)]="selectedMainStatus">
-                Failed
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="mainStatusSelect" id="mainStatusPassed" value="PASSED" (change)="filterRows()" [(ngModel)]="selectedMainStatus">
-                Passed
             </label>
         </div>
     </fieldset>

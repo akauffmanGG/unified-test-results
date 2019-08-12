@@ -14,14 +14,6 @@ import _ from 'lodash';
 export class JenkinsService {
     constructor(private http: HttpClient) { };
 
-    getMainJob(): Promise<JenkinsJob> {
-        return this.getJenkinsJob(JenkinsJobEnum.MAIN);
-    }
-
-    getQaJob(): Promise<JenkinsJob> {
-        return this.getJenkinsJob(JenkinsJobEnum.QA);
-    }
-
     getJenkinsJob(jobType: JenkinsJobEnum): Promise<JenkinsJob> {
         let url = this.getApiPrefix(jobType) + '/job';
 

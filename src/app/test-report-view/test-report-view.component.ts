@@ -30,6 +30,7 @@ export class TestReportViewComponent implements OnInit {
     testCaseResults: TestCaseResult[];
     testReport: TestReport;
     loading: boolean = false;
+    selectedJob = JenkinsJobEnum.MAIN;
 
     constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private tcdbService: TcdbService) {
     }
@@ -41,15 +42,10 @@ export class TestReportViewComponent implements OnInit {
         this.loading = true;
         this.testReport = new TestReport();
 
-        this.jenkinsService.getLatestTestReport(JenkinsJobEnum.QA).then(testReport => {
-            this.testReport.qaReportUrl = testReport.url;
-            return _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.QA));
-        }).then((qaResults: TestCaseResult[]) => {
-            return this.jenkinsService.getLatestTestReport(JenkinsJobEnum.MAIN).then(testReport => {
-                this.testReport.mainReportUrl = testReport.url;
-                let mainResults: TestCaseResult[] = _.map(testReport.testCases, testCase => new TestCaseResult(testCase, JenkinsJobEnum.MAIN));
-                this.testCaseResults = this.mergeResults(qaResults, mainResults);
-            });
+        this.jenkinsService.getLatestTestReport(this.selectedJob).then(testReport => {
+            this.testReport.reportUrl = testReport.url;
+            this.testCaseResults = _.map(testReport.testCases, testCase => new TestCaseResult(testCase, this.selectedJob));
+            return this.testCaseResults;
         }).then(() => {
             this.addTeamsToResults();
             this.testReport.displayedRows = this.testCaseResults;
@@ -64,14 +60,9 @@ export class TestReportViewComponent implements OnInit {
                     this.addPriorities(results);
                 }),
 
-                this.jenkinsService.getHistoricalReports(JenkinsJobEnum.QA)
+                this.jenkinsService.getHistoricalReports(this.selectedJob)
                 .then(results => {
-                    this.addHistory(_.map(results, 'report'), JenkinsJobEnum.QA);
-                }),
-
-                this.jenkinsService.getHistoricalReports(JenkinsJobEnum.MAIN)
-                .then(results => {
-                    this.addHistory(_.map(results, 'report'), JenkinsJobEnum.MAIN);
+                    this.addHistory(_.map(results, 'report'), this.selectedJob);
                 })
             ];
 
@@ -108,27 +99,6 @@ export class TestReportViewComponent implements OnInit {
         return issueMap;
     }
 
-    private mergeResults(qaResults: TestCaseResult[], mainResults: TestCaseResult[]): TestCaseResult[] {
-        let mainResultMap = _.keyBy(mainResults, (result: TestCaseResult) => result.displayName);
-        let qaResultMap = _.keyBy(qaResults, (result: TestCaseResult) => result.displayName);
-
-        let mergedResults = _.unionWith(qaResults, mainResults, (arrVal: TestCaseResult, othVal: TestCaseResult) => {
-            return arrVal.displayName === othVal.displayName;
-        });
-
-        _.forEach(mergedResults, (mergedResult: TestCaseResult) => {
-            if (mainResultMap[mergedResult.displayName] && qaResultMap[mergedResult.displayName]) {
-                let mainResult: TestCaseResult = mainResultMap[mergedResult.displayName];
-                let qaResult: TestCaseResult = qaResultMap[mergedResult.displayName];
-
-                mergedResult.merge(mainResult);
-                mergedResult.merge(qaResult);
-            }
-        });
-
-        return mergedResults;
-    }
-
     private addHistory(historicalResults: JenkinsTestReport[], jobType:JenkinsJobEnum): void {
         // Create list of maps of class name to result
         let resultsMapList = _.map(historicalResults, (testReport:JenkinsTestReport) => {
@@ -141,13 +111,7 @@ export class TestReportViewComponent implements OnInit {
                 let key = testCaseResult.suite + " " + testCaseResult.case;
 
                 if(resultMap[key]) {
-                    let result:TestCaseJobResult = new TestCaseJobResult(resultMap[key]);
-
-                    if(jobType === JenkinsJobEnum.MAIN) {
-                        testCaseResult.addMainHistory(result);
-                    } else {
-                        testCaseResult.addQaHistory(result);
-                    }
+                    testCaseResult.addHistory(new TestCaseJobResult(resultMap[key]));
                 }
                 
             });
@@ -174,22 +138,15 @@ export class TestReportViewComponent implements OnInit {
     }
 
     private setJobTrends(): void {
-        this.testReport.qaSuccessTrend = 0;
-        this.testReport.qaFailTrend = 0;
-        this.testReport.mainSuccessTrend = 0;
-        this.testReport.mainFailTrend = 0;
+        this.testReport.successTrend = 0;
+        this.testReport.failTrend = 0;
 
-        this.jenkinsService.getMainJob()
-        .then((mainJob: JenkinsJob) => {
-            this.testReport.mainSuccessTrend = mainJob.lastCompletedBuild.number - (mainJob.lastUnsuccessfulBuild ? mainJob.lastUnsuccessfulBuild.number : 0);
-            this.testReport.mainFailTrend = mainJob.lastCompletedBuild.number - mainJob.lastSuccessfulBuild.number;
+        this.jenkinsService.getJenkinsJob(this.selectedJob)
+        .then((job: JenkinsJob) => {
+            this.testReport.successTrend = job.lastCompletedBuild.number - (job.lastUnsuccessfulBuild ? job.lastUnsuccessfulBuild.number : 0);
+            this.testReport.failTrend = job.lastCompletedBuild.number - job.lastSuccessfulBuild.number;
         });
 
-        this.jenkinsService.getQaJob()
-        .then((qaJob: JenkinsJob) => {
-            this.testReport.qaSuccessTrend = qaJob.lastCompletedBuild.number - (qaJob.lastUnsuccessfulBuild ? qaJob.lastUnsuccessfulBuild.number : 0);
-            this.testReport.qaFailTrend = qaJob.lastCompletedBuild.number - qaJob.lastSuccessfulBuild.number;
-        });
     }
 
 }

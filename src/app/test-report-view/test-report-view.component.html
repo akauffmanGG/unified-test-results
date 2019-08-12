@@ -4,11 +4,22 @@
     <div class="row">
         <div class="col-lg-2 sidebar">
 
-            <button
-                (click)="getTestReport()"
-                class="btn btn-primary">
-                Get Test Results
-            </button>
+            <form class="form-inline">
+                <div class="form-group mb-2 mr-1">
+                    <select class="form-control" name="jobSelect" id="jobSelect" [(ngModel)]="selectedJob">
+                        <option value="MAIN">latest_systest</option>
+                        <option value="QA">QA</option>
+                    </select>
+                </div>
+                
+                <button
+                    type="submit"
+                    (click)="getTestReport()"
+                    class="btn btn-primary mb-2">
+                    Get Test Results
+                </button>
+            </form>
+            
 
             <div *ngIf="testCaseResults && testCaseResults.length && !loading">
                 <test-report-filter [testReport] = "testReport" [testResults] = "testCaseResults"></test-report-filter>

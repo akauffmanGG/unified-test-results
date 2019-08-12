@@ -16,10 +16,9 @@ export default class TestCaseResult {
     case: string;
     team: Team;
     priority: string;
-    qaResult: TestCaseJobResult;
-    qaHistory: TestCaseJobResult[] = [];
-    mainResult: TestCaseJobResult;
-    mainHistory: TestCaseJobResult[] = [];
+    jobResult: TestCaseJobResult;
+    history: TestCaseJobResult[] = [];
+
     jiraIssue: JiraIssue;
     isCreatingJiraIssue: boolean;
 
@@ -32,7 +31,7 @@ export default class TestCaseResult {
     }
 
     get isConsistentlyFailing(): boolean {
-        return this.qaResult.isConsistentlyFailing || this.mainResult.isConsistentlyFailing;
+        return this.jobResult.isConsistentlyFailing;
     }
 
     get needsJiraIssue(): boolean {
@@ -48,33 +47,13 @@ export default class TestCaseResult {
         this.suite = testCase.suite;
         this.case = testCase.case;
 
-        if(job === JenkinsJobEnum.QA) {
-            this.qaResult = new TestCaseJobResult(testCase);
-            this.mainResult = new TestCaseJobResult({});
-        } else if (job === JenkinsJobEnum.MAIN){
-            this.mainResult = new TestCaseJobResult(testCase);
-            this.qaResult = new TestCaseJobResult({});
-        } else {
-            console.error('Invalid Jenkins Job');
-        }
+        this.jobResult = new TestCaseJobResult(testCase);
 
         this.team = MissingTeam;
     }
 
-    merge(other: TestCaseResult) {
-        if(!this.qaResult.status) {
-            this.qaResult = other.qaResult;
-        }
-        if(!this.mainResult.status) {
-            this.mainResult = other.mainResult;
-        }
+    addHistory(result: TestCaseJobResult) {
+        this.history.push(result);
     }
 
-    addQaHistory(result: TestCaseJobResult) {
-        this.qaHistory.push(result);
-    }
-
-    addMainHistory(result: TestCaseJobResult) {
-        this.mainHistory.push(result);
-    }
 }

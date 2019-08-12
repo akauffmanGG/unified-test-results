@@ -12,13 +12,9 @@
         <ngx-datatable-row-detail [rowHeight]="100">
             <ng-template let-row="row"  ngx-datatable-row-detail-template>
                 <div class="error-row">
-                    <div *ngIf="row.qaResult.errorMessage" class="error-message">
-                        <span class="error-message-title">QA Error Message:</span> 
+                    <div *ngIf="row.jobResult.errorMessage" class="error-message">
+                        <span class="error-message-title">Error Message:</span> 
                         {{row.qaResult.errorMessage}}
-                    </div>
-                    <div *ngIf="row.mainResult.errorMessage" class="error-message">
-                            <span class="error-message-title">Main Error Message:</span>
-                        {{row.mainResult.errorMessage}}
                     </div>
                 </div>
             </ng-template>
@@ -33,30 +29,15 @@
         <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="1"></ngx-datatable-column>
 
         <ngx-datatable-column
-            name="QA Status"
-            prop="qaResult.status"
+            name="Status"
+            prop="jobResult.status"
             [cellClass]="statusCellClass"
             [flexGrow]="1">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="QA Age" prop="qaResult.age" [flexGrow]="1"></ngx-datatable-column>
+        <ngx-datatable-column name="Age" prop="jobResult.age" [flexGrow]="1"></ngx-datatable-column>
 
-        <ngx-datatable-column name="QA History" prop="qaHistory" [comparator]="historyComparator" [flexGrow]="2">
-            <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
-                <test-case-history [history]="value"></test-case-history>
-            </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column
-            name="Main Status"
-            prop="mainResult.status"
-            [cellClass]="statusCellClass"
-            [flexGrow]="1">
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Main Age" prop="mainResult.age" [flexGrow]="1"></ngx-datatable-column>
-
-        <ngx-datatable-column name="Main History" prop="mainHistory" [comparator]="historyComparator" [flexGrow]="2">
+        <ngx-datatable-column name="History" prop="history" [comparator]="historyComparator" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
                 <test-case-history [history]="value"></test-case-history>
             </ng-template>
@@ -87,17 +68,10 @@
                    Rows: {{rowCount}}
                </div>
                <div style="padding: 5px 10px">
-                   <a href="{{testReport.qaReportUrl}}" target="_blank">QA Results</a>
+                   <a href="{{testReport.reportUrl}}" target="_blank">Trend</a>
                    (
-                    <span *ngIf="testReport.qaSuccessTrend" class="success-trend">+{{testReport.qaSuccessTrend}}</span>
-                    <span *ngIf="testReport.qaFailTrend" class="fail-trend">-{{testReport.qaFailTrend}}</span>
-                   )
-               </div>
-               <div style="padding: 5px 10px">
-                   <a href="{{testReport.mainReportUrl}}" target="_blank">Main Results</a>
-                   (
-                       <span *ngIf="testReport.mainSuccessTrend" class="success-trend">+{{testReport.mainSuccessTrend}}</span>
-                       <span *ngIf="testReport.mainFailTrend" class="fail-trend">-{{testReport.mainFailTrend}}</span>
+                    <span *ngIf="testReport.successTrend" class="success-trend">+{{testReport.successTrend}}</span>
+                    <span *ngIf="testReport.failTrend" class="fail-trend">-{{testReport.failTrend}}</span>
                    )
                </div>
              </ng-template>
