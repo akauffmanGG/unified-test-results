@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { JenkinsService } from '../services/jenkins/jenkins.service';
 import { JiraService } from '../services/jira/jira.service';
 import { TcdbService } from '../services/tcdb/tcdb.service';
-import { FilterResults } from './filter-results';
 
 import JenkinsTestReport from '../services/jenkins/jenkins-test-report';
 import JenkinsJobEnum from '../services/jenkins/jenkins-job-enum';
@@ -24,21 +23,15 @@ import { promise } from 'protractor';
     selector: 'test-report-view',
     templateUrl: './test-report-view.component.html',
     styleUrls: ['./test-report-view.component.scss'],
-    providers: [JenkinsService, JiraService, TcdbService, FilterResults]
+    providers: [JenkinsService, JiraService, TcdbService]
 })
 export class TestReportViewComponent implements OnInit {
 
     testCaseResults: TestCaseResult[];
     testReport: TestReport;
-    qaSelected: boolean = true;
-    mainSelected: boolean = true;
-    showOnlyFailures: boolean = true;
-    showOnlyBothFailures: boolean = false;
-    showOnlyConsistentFailures: boolean = false;
-    showFixedIssues: boolean = false;
     loading: boolean = false;
 
-    constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private tcdbService: TcdbService, private filterResults: FilterResults) {
+    constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private tcdbService: TcdbService) {
     }
 
     ngOnInit() {
@@ -90,17 +83,6 @@ export class TestReportViewComponent implements OnInit {
         });
 
         this.setJobTrends();
-    }
-
-    filterRows(): void {
-        this.filterResults.showMain = this.mainSelected;
-        this.filterResults.showQa = this.qaSelected;
-        this.filterResults.showOnlyFailures = this.showOnlyFailures;
-        this.filterResults.showOnlyBothFailures = this.showOnlyBothFailures;
-        this.filterResults.showOnlyConsistentFailures = this.showOnlyConsistentFailures;
-        this.filterResults.showFixedIssues = this.showFixedIssues;
-
-        this.testReport.displayedRows = this.filterResults.filter(this.testCaseResults);
     }
 
     private addJiraIssues(): Promise<any> {
