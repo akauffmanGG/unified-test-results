@@ -38,7 +38,7 @@ export default class TestCaseResult {
         return !this.jiraIssue && this.isConsistentlyFailing && !this.isCreatingJiraIssue;
     }
 
-    constructor(testCase: JenkinsTestCase, job: JenkinsJobEnum) {
+    constructor(testCase: JenkinsTestCase) {
 
         this.className = testCase.className;
 

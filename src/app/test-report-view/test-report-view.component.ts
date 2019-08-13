@@ -17,6 +17,7 @@ import teamSuiteMap from './team-suite-map';
 import { MissingTeam } from './team';
 import { TestCaseJobResult } from './test-case-job-result';
 import { promise } from 'protractor';
+import { JenkinsBuild } from '../services/jenkins/jenkins-build';
 
 
 @Component({
@@ -28,23 +29,26 @@ import { promise } from 'protractor';
 export class TestReportViewComponent implements OnInit {
 
     testCaseResults: TestCaseResult[];
-    testReport: TestReport;
+    testReport: TestReport = new TestReport();
     loading: boolean = false;
-    selectedJob = JenkinsJobEnum.MAIN;
+    selectedJob = "client.test.latest_systest";
+    icatJobs: string[] = [];
 
     constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private tcdbService: TcdbService) {
     }
 
     ngOnInit() {
+        this.jenkinsService.getIcatJobs().then((jobs:string[]) => {
+            this.icatJobs = jobs;
+        });
     }
 
     getTestReport(): void {
         this.loading = true;
-        this.testReport = new TestReport();
 
         this.jenkinsService.getLatestTestReport(this.selectedJob).then(testReport => {
             this.testReport.reportUrl = testReport.url;
-            this.testCaseResults = _.map(testReport.testCases, testCase => new TestCaseResult(testCase, this.selectedJob));
+            this.testCaseResults = _.map(testReport.testCases, testCase => new TestCaseResult(testCase));
             return this.testCaseResults;
         }).then(() => {
             this.addTeamsToResults();
@@ -55,6 +59,8 @@ export class TestReportViewComponent implements OnInit {
             let promises : Promise<any>[] = [
                 this.addJiraIssues(),
 
+                this.setJobTrends(),
+
                 this.tcdbService.getTestCasePriorities(cases)
                 .then(results => {
                     this.addPriorities(results);
@@ -62,7 +68,7 @@ export class TestReportViewComponent implements OnInit {
 
                 this.jenkinsService.getHistoricalReports(this.selectedJob)
                 .then(results => {
-                    this.addHistory(_.map(results, 'report'), this.selectedJob);
+                    this.addHistory(_.map(results, 'report'));
                 })
             ];
 
@@ -72,8 +78,7 @@ export class TestReportViewComponent implements OnInit {
         .catch(() => {
             this.loading = false;
         });
-
-        this.setJobTrends();
+        
     }
 
     private addJiraIssues(): Promise<any> {
@@ -99,7 +104,7 @@ export class TestReportViewComponent implements OnInit {
         return issueMap;
     }
 
-    private addHistory(historicalResults: JenkinsTestReport[], jobType:JenkinsJobEnum): void {
+    private addHistory(historicalResults: JenkinsTestReport[]): void {
         // Create list of maps of class name to result
         let resultsMapList = _.map(historicalResults, (testReport:JenkinsTestReport) => {
             return _.keyBy(testReport.testCases, (result: TestCaseResult) => result.suite + " " + result.case);
@@ -137,14 +142,19 @@ export class TestReportViewComponent implements OnInit {
         });
     }
 
-    private setJobTrends(): void {
+    private setJobTrends(): Promise<any> {
         this.testReport.successTrend = 0;
         this.testReport.failTrend = 0;
 
-        this.jenkinsService.getJenkinsJob(this.selectedJob)
+        return this.jenkinsService.getJenkinsJob(this.selectedJob)
         .then((job: JenkinsJob) => {
             this.testReport.successTrend = job.lastCompletedBuild.number - (job.lastUnsuccessfulBuild ? job.lastUnsuccessfulBuild.number : 0);
             this.testReport.failTrend = job.lastCompletedBuild.number - job.lastSuccessfulBuild.number;
+            return this.jenkinsService.getJenkinsBuild(this.selectedJob, job.lastSuccessfulBuild.number);
+        }).then((build: JenkinsBuild) => {
+            this.testReport.duration = build.duration;
+            this.testReport.buildNumber = build.number;
+            this.testReport.timestamp = build.timestamp;
         });
 
     }

@@ -14,8 +14,22 @@ import _ from 'lodash';
 export class JenkinsService {
     constructor(private http: HttpClient) { };
 
-    getJenkinsJob(jobType: JenkinsJobEnum): Promise<JenkinsJob> {
-        let url = this.getApiPrefix(jobType) + '/job';
+    getIcatJobs(): Promise<String[]> {
+        let url = '/api/jenkins/icat/jobs';
+
+        return this.http.get(url)
+            .toPromise()
+            .then((response:any) => {
+                console.log('Get Icat Jobs completed successfully');
+                let jobs = _.map(response, 'name');
+
+                return jobs;
+            }).catch(this.handleError);
+
+    }
+
+    getJenkinsJob(job: string): Promise<JenkinsJob> {
+        let url = '/api/jenkins/icat/job/' + job + '/'
 
         return this.http.get(url)
             .toPromise()
@@ -25,8 +39,19 @@ export class JenkinsService {
             }).catch(this.handleError);
     };
 
-    getLatestTestReport(jobType: JenkinsJobEnum): Promise<JenkinsTestReport> {
-        let url = this.getApiPrefix(jobType) + '/test_report/latest';
+    getJenkinsBuild(job: string, buildNumber: number): Promise<JenkinsBuild> {
+        let url = '/api/jenkins/icat/build/' + job + '/' + buildNumber;
+
+        return this.http.get(url)
+            .toPromise()
+            .then(response => {
+                console.log('Get Jenkins Build completed successfully');
+                return new JenkinsBuild(response);
+            }).catch(this.handleError);
+    };
+
+    getLatestTestReport(job: string): Promise<JenkinsTestReport> {
+        let url = '/api/jenkins/icat/test_report/' + job + '/latest'
 
         return this.http.get(url)
             .toPromise()
@@ -37,15 +62,15 @@ export class JenkinsService {
     }
 
     // Get test reports for the defined number of prior runs
-    getHistoricalReports(jobType: JenkinsJobEnum, resultsAmount: number = 10): Promise<any[]> {
-        return this.getJenkinsJob(jobType)
+    getHistoricalReports(job: string, resultsAmount: number = 10): Promise<any[]> {
+        return this.getJenkinsJob(job)
             .then((jenkinsJob: JenkinsJob) => {
-                return this.getSuccessfulBuilds(jenkinsJob, jobType);
+                return this.getSuccessfulBuilds(jenkinsJob, job);
 
             }).then((builds: JenkinsBuild[]) => {
                 let recentBuilds = _.takeRight(_.sortBy(builds, 'number'), resultsAmount);
                 return Promise.all(_.map(recentBuilds, build => {
-                    let url = this.getApiPrefix(jobType) + '/test_report/' + build.number;
+                    let url = '/api/jenkins/icat/test_report/' + job + '/' + build.number;
                     return this.http.get(url)
                         .toPromise()
                         .then(response => {
@@ -74,17 +99,17 @@ export class JenkinsService {
 
     private getApiPrefix(jobType: JenkinsJobEnum): String {
         if (jobType === JenkinsJobEnum.MAIN) {
-            return '/api/jenkins/main';
+            return '/api/jenkins/icat/job/client.test.latest_systest/';
         } else if (jobType == JenkinsJobEnum.QA) {
-            return '/api/jenkins/qa';
+            return '/api/jenkins/icat/job/client.test.2019r3_systest/';
         } else {
             console.error('Invalid job parameter');
         }
     }
 
-    private getSuccessfulBuilds(job: JenkinsJob, jobType: JenkinsJobEnum): Promise<JenkinsBuild[]> {
-        console.log('Getting all successful ' + jobType.toString() + ' builds');
-        let url = this.getApiPrefix(jobType) + '/build/';
+    private getSuccessfulBuilds(job: JenkinsJob, jobName: string): Promise<JenkinsBuild[]> {
+        console.log('Getting all successful builds');
+        let url = '/api/jenkins/icat/build/' + jobName + '/'
         let successfulBuilds: JenkinsBuild[] = [];
         return Promise.all(_.map(job.builds, build => {
             return this.http.get(url + build.number)
@@ -96,7 +121,7 @@ export class JenkinsService {
                 }).catch(this.handleError);
         })
         ).then(() => {
-            console.log('Number of successful ' + jobType.toString() + ' builds: ' + successfulBuilds.length);
+            console.log('Number of successful builds: ' + successfulBuilds.length);
             return successfulBuilds;
         });
 

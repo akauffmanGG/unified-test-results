@@ -2,13 +2,12 @@
 
 <div class="test-report-view">
     <div class="row">
-        <div class="col-lg-2 sidebar">
+        <div class="col-lg-3 sidebar">
 
-            <form class="form-inline">
-                <div class="form-group mb-2 mr-1">
+            <form class="form">
+                <div class="form-group mb-1">
                     <select class="form-control" name="jobSelect" id="jobSelect" [(ngModel)]="selectedJob">
-                        <option value="MAIN">latest_systest</option>
-                        <option value="QA">QA</option>
+                        <option *ngFor="let job of icatJobs" [ngValue]="job">{{job}}</option>
                     </select>
                 </div>
                 
@@ -25,7 +24,7 @@
                 <test-report-filter [testReport] = "testReport" [testResults] = "testCaseResults"></test-report-filter>
             </div>
         </div>
-        <div class="col-lg-10 main">
+        <div class="col-lg-9 main">
             <p *ngIf="testCaseResults && testCaseResults.length && !loading">
               <test-report-table [testReport] = "testReport"></test-report-table>
             </p>

@@ -41,14 +41,10 @@ export class JiraService {
     }
 
     private createDescription(testCaseResult: TestCaseResult): string {
-        let description: string = `${testCaseResult.suite} ${testCaseResult.case} fails at `;
+        let description: string = `${testCaseResult.suite} ${testCaseResult.case} fails`;
 
-        if(testCaseResult.qaResult.isConsistentlyFailing && testCaseResult.mainResult.isConsistentlyFailing) {
-            return description + 'Main and QA'
-        } else if(testCaseResult.qaResult.isConsistentlyFailing) {
-            return description + 'QA';
-        } else if(testCaseResult.mainResult.isConsistentlyFailing) {
-            return description + 'Main'
+        if(testCaseResult.jobResult.isConsistentlyFailing) {
+            return description + ' consistently';
         }
     }
 

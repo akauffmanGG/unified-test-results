@@ -64,15 +64,20 @@
              <ng-template
                ngx-datatable-footer-template
                let-rowCount="rowCount">
-               <div style="padding: 5px 10px">
-                   Rows: {{rowCount}}
+               <div class="footer-column">
+                   Rows: <span class="footer-info">{{rowCount}}</span>
                </div>
-               <div style="padding: 5px 10px">
-                   <a href="{{testReport.reportUrl}}" target="_blank">Trend</a>
-                   (
-                    <span *ngIf="testReport.successTrend" class="success-trend">+{{testReport.successTrend}}</span>
-                    <span *ngIf="testReport.failTrend" class="fail-trend">-{{testReport.failTrend}}</span>
-                   )
+               <div class="footer-column">
+                   Last successful build: 
+                   <a class="footer-info" href="{{testReport.reportUrl}}" target="_blank">
+                       {{testReport.buildNumber}} ({{testReport.displayTime}})
+                    </a>
+               </div>
+               <div class="footer-column">
+                    Duration: <span class="footer-info">{{testReport.displayDuration}}</span>
+               </div>
+               <div class="footer-column">
+                    <span [ngClass]="(testReport.successTrend) ? 'success-trend' : 'fail-trend'" class="trend">{{testReport.displayTrend}}</span>
                </div>
              </ng-template>
            </ngx-datatable-footer>

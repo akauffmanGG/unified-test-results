@@ -100,13 +100,37 @@ $hover-color: #485563;
             padding-bottom: 3px;
         }
 
-        .success-trend {
-            color: $success
+        .datatable-footer {
+            .trend {
+                display: inline-block;
+                height: 18px;
+                width: 18px;
+                line-height: 18px;
+                border-radius: 9px;
+                text-align: center;
+                vertical-align: middle;
+                font-weight: bolder;
+                font-size: 12px;
+            }
+
+            .success-trend {
+                background-color: $success
+            }
+    
+            .fail-trend {
+                background-color: $danger
+            }
+    
+            .footer-column {
+                padding: 5px 10px;
+            }
+
+            .footer-info {
+                color: $info;
+            }
         }
 
-        .fail-trend {
-            color: $danger
-        }
+        
     }
 
 }
