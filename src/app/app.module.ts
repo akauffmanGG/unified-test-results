@@ -14,6 +14,8 @@ import { TestReportFilterComponent } from './test-report-filter/test-report-filt
 import { TestCaseHistoryComponent } from './test-case-history/test-case-history.component';
 import { ErrorHistoryModalComponent } from './error-history-modal/error-history-modal.component';
 import { JiraIssueSummaryComponent } from './jira-issue-summary/jira-issue-summary.component';
+import { NodeStatusComponent } from './node-status/node-status.component';
+import { NodeComponent } from './node-status/node.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { JiraIssueSummaryComponent } from './jira-issue-summary/jira-issue-summa
     TestReportFilterComponent,
     TestCaseHistoryComponent,
     ErrorHistoryModalComponent,
-    JiraIssueSummaryComponent
+    JiraIssueSummaryComponent,
+    NodeStatusComponent,
+    NodeComponent
   ],
   imports: [
     BrowserModule,

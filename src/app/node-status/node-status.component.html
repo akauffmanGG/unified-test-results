@@ -1,0 +1,11 @@
+<div *ngIf="nodes && nodes.length" class="node-status">
+    <div class="node-status-header pb-2">
+        <div class="header-column">Total nodes: {{nodes.length}}</div>
+        <div class="header-column">Available nodes: {{availableNodes.length}}</div>
+        <div class="header-column">In Use nodes: {{inUseNodes.length}}</div>
+        <div class="header-column">Disabled nodes: {{disabledNodes.length}}</div>
+    </div>
+    <div class="card-deck">
+        <node *ngFor="let node of nodes" [node]="node"></node>
+    </div>
+</div>

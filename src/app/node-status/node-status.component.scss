@@ -1,0 +1,15 @@
+.node-status {
+    .card-deck .card {
+        min-width: 150px;
+        border-width: 5px;
+    }
+
+    .node-status-header {
+        display: flex;
+
+        .header-column {
+            margin-right: 15px;
+        }
+    }
+
+}

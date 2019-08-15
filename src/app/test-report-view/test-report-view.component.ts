@@ -33,6 +33,8 @@ export class TestReportViewComponent implements OnInit {
     loading: boolean = false;
     selectedJob = "client.test.latest_systest";
     icatJobs: string[] = [];
+    isFilterCollapsed = false;
+    isNodeStatusCollapsed = true;
 
     constructor(private jenkinsService: JenkinsService, private jiraService: JiraService, private tcdbService: TcdbService) {
     }

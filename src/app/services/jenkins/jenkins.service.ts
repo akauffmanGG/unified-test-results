@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { JenkinsJob } from './jenkins-job';
 import { JenkinsBuild } from './jenkins-build';
+import JenkinsNode from './jenkins-node';
 import JenkinsTestReport from './jenkins-test-report';
 import JenkinsJobEnum from './jenkins-job-enum';
 import _ from 'lodash';
@@ -13,6 +14,19 @@ import _ from 'lodash';
 @Injectable()
 export class JenkinsService {
     constructor(private http: HttpClient) { };
+
+    getIcatNodes(): Promise<JenkinsNode[]> {
+        let url = '/api/jenkins/icat/nodes';
+
+        return this.http.get(url)
+            .toPromise()
+            .then((response:any) => {
+                console.log('Get Icat Nodes completed successfully');
+                let nodes = _.map(response, (node) => new JenkinsNode(node));
+
+                return nodes;
+            }).catch(this.handleError);
+    }
 
     getIcatJobs(): Promise<String[]> {
         let url = '/api/jenkins/icat/jobs';
