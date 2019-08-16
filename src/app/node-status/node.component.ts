@@ -6,6 +6,7 @@ import Node from './node';
     selector: 'node',
     templateUrl: './node.component.html',
     providers: [],
+    styleUrls: ['./node.component.scss'],
     host: { 
             'class': 'card mb-1 mx-1', 
             '[class.border-danger]': 'disabled',

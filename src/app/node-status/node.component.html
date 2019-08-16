@@ -1,4 +1,8 @@
-<div class="card-header">{{node.displayName}}</div>
+<div class="card-header">
+    <a href="{{node.url}}" target="_blank">
+        {{node.displayName}}
+    </a>
+</div>
 <div class="card-body p-2 node">
     <p class="card-text"><small *ngFor="let label of node.assignedLabels; let isLast=last">{{label}}{{isLast ? '' : ' | '}}</small></p>  
 </div>

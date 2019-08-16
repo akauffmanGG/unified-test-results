@@ -44,6 +44,10 @@ export default class Node {
         }
     }
 
+    get url() : string {
+        return 'https://ci.qfun.com/computer/' + this.displayName;
+    }
+
     constructor (obj: JenkinsNode) {
         this.description = obj.description
         this.displayName = obj.displayName;
