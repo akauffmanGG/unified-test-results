@@ -22,11 +22,17 @@
 
             <div *ngIf="testCaseResults && testCaseResults.length && !loading">
 
-                <span (click)="isFilterCollapsed = !isFilterCollapsed" [attr.aria-expanded]="!isFilterCollapsed" aria-controls="filterCard">
-                    <legend>Filters</legend>
-                </span>
+                    <a class="collapse-title"
+                    (click)="isFilterCollapsed = !isFilterCollapsed" 
+                    [attr.aria-expanded]="!isFilterCollapsed" 
+                    aria-controls="nodeCard">
+                    <div class="collapse-icon">
+                        <span [ngClass]="isFilterCollapsed ? 'expand-panel' : 'collapse-panel'"></span>
+                    </div>
+                    <h3>Filters</h3>
+                </a>
                             
-                <div id="filterCard" [ngbCollapse]="isFilterCollapsed">
+                <div id="filterCard" class="filter-card" [ngbCollapse]="isFilterCollapsed">
                     <div class="card">
                         <div class="card-body">
                                 <test-report-filter [testReport] = "testReport" [testResults] = "testCaseResults"></test-report-filter>
@@ -35,9 +41,15 @@
                 </div>
             </div>
             
-            <div (click)="isNodeStatusCollapsed = !isNodeStatusCollapsed" [attr.aria-expanded]="!isNodeStatusCollapsed" aria-controls="nodeCard">
-                <legend>Nodes</legend>
-            </div>
+            <a class="collapse-title"
+                (click)="isNodeStatusCollapsed = !isNodeStatusCollapsed" 
+                [attr.aria-expanded]="!isNodeStatusCollapsed" 
+                aria-controls="nodeCard">
+                <div class="collapse-icon">
+                    <span [ngClass]="isNodeStatusCollapsed ? 'expand-panel' : 'collapse-panel'"></span>
+                </div>
+                <h3>Nodes</h3>
+            </a>
                             
             <div id="nodeCard" [ngbCollapse]="isNodeStatusCollapsed">
                 <div class="card">
