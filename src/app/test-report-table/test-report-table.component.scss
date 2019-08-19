@@ -4,6 +4,7 @@
 $hover-color: #485563;
 
 .test-report-table-component {
+    height: 100%;
 
     ::ng-deep ngx-loading {
         .backdrop {
@@ -38,7 +39,7 @@ $hover-color: #485563;
 
     ::ng-deep .ngx-datatable.material {
         background: none;
-        height: calc(100vh - #{$header-height} - 15px);
+        height: 100%;
 
         .datatable-row-group:hover {
             background-color: $hover-color;

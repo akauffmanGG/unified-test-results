@@ -2,6 +2,19 @@
 
 .test-report-view {
     overflow: hidden;
+    height: calc(100vh - #{$header-height} - 15px);
+
+    .row {
+        height: 100%;
+
+        .sidebar, .main {
+            height: 100%;
+        }
+
+        .main p {
+            height: 100%;
+        }
+    }
 }
 
 .filter-card {
