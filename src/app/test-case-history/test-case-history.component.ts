@@ -9,7 +9,7 @@ import _ from 'lodash';
     styleUrls: ['./test-case-history.component.scss'],
 })
 export class TestCaseHistoryComponent implements OnChanges {
-    @ViewChild('historyButton') historyButton: any;
+    @ViewChild('historyButton', {static: false}) historyButton: any;
 
     @Input() history: TestCaseJobResult[];
 

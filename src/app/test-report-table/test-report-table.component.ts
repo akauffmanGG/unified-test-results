@@ -30,7 +30,7 @@ function getFlappinessMeasure(history: TestCaseJobResult[]): number {
 })
 
 export class TestReportTableComponent implements OnInit {
-    @ViewChild('testReportTable') table: any;
+    @ViewChild('testReportTable', {static: false}) table: any;
 
     @Input()
     testReport: TestReport;
