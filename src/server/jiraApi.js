@@ -7,7 +7,8 @@ let credentials = process.env.JIRA_USER + ':' + process.env.JIRA_PASSWORD;
 const JIRA_AUTH = 'Basic ' + new Buffer(credentials).toString('base64');
 console.info(JIRA_AUTH);
 
-const QUERY_URL = 'https://devjira.inin.com/rest/api/2/search?jql=%22Development%20Labels%22%20in%20(cart_issue)%20and%20%22Development%20Labels%22%20in%20(consistent_failure)%20and%20status%20not%20in%20(resolved,%20backlog)&fields=id,key,summary,customfield_10073,assignee,status';
+//Plain text query: https://devjira.inin.com/rest/api/2/search?jql=project = Web AND component = "E2E Tests" and issueType = Bug AND status in (Accepted, "Waiting for Review", "Integration Testing") and "Test Case Id" is not EMPTY&fields=id,key,summary,customfield_10073,assignee,status
+const QUERY_URL = 'https://devjira.inin.com/rest/api/2/search?jql=project%20=%20Web%20AND%20component%20=%20%22E2E%20Tests%22%20and%20issueType%20=%20Bug%20AND%20status%20in%20(Accepted,%20%22Waiting%20for%20Review%22,%20%22Integration%20Testing%22)%20and%20%22Test%20Case%20Id%22%20is%20not%20EMPTY&fields=id,key,summary,customfield_10073,assignee,status';
 const ISSUE_URL = 'https://devjira.inin.com/rest/api/2/issue';
 
 let config = {
@@ -99,7 +100,7 @@ function createIssueObj(description, teamLabel) {
             },
             summary: description,
             versions: [{
-                name: "main" //TODO: replace with correct version when qa failure
+                name: "main"
             }],
             fixVersions: [{
                 name: "main"
@@ -115,7 +116,7 @@ function createIssueObj(description, teamLabel) {
                 value: "Systest"
             },
             //Development labels
-            customfield_10350: ["cart_issue", "consistent_failure", teamLabel]
+            customfield_10350: [teamLabel]
         }
     }
 }
