@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 
-import { JiraIssue } from '../services/jira/jira-issue';
+import { JiraIssue } from '@service/jira/jira-issue';
 
 @Component({
     selector: 'jira-issue-summary',

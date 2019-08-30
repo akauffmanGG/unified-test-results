@@ -1,5 +1,5 @@
 import TestCaseResult from './test-case-result';
-import JenkinsTestReport from '../services/jenkins/jenkins-test-report';
+import JenkinsTestReport from '@service/jenkins/jenkins-test-report';
 
 import * as moment from 'moment';
 

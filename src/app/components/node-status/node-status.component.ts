@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import _ from 'lodash';
 
-import { JenkinsService } from '../services/jenkins/jenkins.service';
+import { JenkinsService } from '@service/jenkins/jenkins.service';
 
 import Node from './node';
 

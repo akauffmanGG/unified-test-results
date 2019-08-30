@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { JiraQuery } from './jira-query';
 import { JiraIssue } from './jira-issue';
 
-import TestCaseResult from '../../test-report-view/test-case-result';
+import TestCaseResult from '../../components/test-report-view/test-case-result';
 
 @Injectable()
 export class JiraService {

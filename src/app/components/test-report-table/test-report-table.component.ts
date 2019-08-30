@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TestReport } from '../test-report-view/test-report';
 import TestCaseResult from '../test-report-view/test-case-result';
-import { JiraService } from '../services/jira/jira.service';
-import { JiraIssue } from '../services/jira/jira-issue';
+import { JiraService } from '@service/jira/jira.service';
+import { JiraIssue } from '@service/jira/jira-issue';
 import * as _ from 'lodash';
 import { TestCaseJobResult } from '../test-report-view/test-case-job-result';
 

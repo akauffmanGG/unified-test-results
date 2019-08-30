@@ -1,4 +1,4 @@
-import JenkinsNode from '../services/jenkins/jenkins-node';
+import JenkinsNode from '@service/jenkins/jenkins-node';
 import _ from 'lodash';
 
 export default class Node {

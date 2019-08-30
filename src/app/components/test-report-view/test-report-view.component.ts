@@ -1,15 +1,16 @@
 import _ from 'lodash';
 import { Component, OnInit } from '@angular/core';
-import { JenkinsService } from '../services/jenkins/jenkins.service';
-import { JiraService } from '../services/jira/jira.service';
-import { TcdbService } from '../services/tcdb/tcdb.service';
+import { JenkinsService } from '@service/jenkins/jenkins.service';
+import { JiraService } from '@service/jira/jira.service';
+import { TcdbService } from '@service/tcdb/tcdb.service';
 
-import JenkinsTestReport from '../services/jenkins/jenkins-test-report';
-import JenkinsJobEnum from '../services/jenkins/jenkins-job-enum';
-import { JenkinsJob } from '../services/jenkins/jenkins-job';
+import JenkinsTestReport from '@service/jenkins/jenkins-test-report';
+import JenkinsJobEnum from '@service/jenkins/jenkins-job-enum';
+import { JenkinsJob } from '@service/jenkins/jenkins-job';
+import { JenkinsBuild } from '@service/jenkins/jenkins-build';
 
-import { JiraQuery } from '../services/jira/jira-query';
-import { JiraIssue } from '../services/jira/jira-issue';
+import { JiraQuery } from '@service/jira/jira-query';
+import { JiraIssue } from '@service/jira/jira-issue';
 
 import TestCaseResult from './test-case-result';
 import { TestReport } from './test-report';
@@ -17,7 +18,7 @@ import teamSuiteMap from './team-suite-map';
 import { MissingTeam } from './team';
 import { TestCaseJobResult } from './test-case-job-result';
 import { promise } from 'protractor';
-import { JenkinsBuild } from '../services/jenkins/jenkins-build';
+
 
 
 @Component({
