@@ -1,4 +1,8 @@
+@import "../../style/variables.scss";
+
 .node-status {
+    min-height: 400px;
+
     .card-deck .card {
         min-width: 150px;
         border-width: 5px;
@@ -6,10 +10,20 @@
 
     .node-status-header {
         display: flex;
+        justify-content: space-around;
 
         .header-column {
-            margin-right: 15px;
+            flex: 0 1 auto;
+            line-height: 1.5rem;
         }
+
+        .refresh {
+            text-decoration: none;
+            color: $primary;
+            font-size: 1.5rem;
+            font-weight: bolder;
+        }
+
     }
 
 }
