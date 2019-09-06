@@ -11,6 +11,10 @@ export default class Node {
     get statusDescription() : string {
         //order matters here
 
+        if(this.offline) {
+            return "offline";
+        }
+
         if(this.assignedLabels.includes('icat-test-in-use')) {
             return "in use";
         }
@@ -21,10 +25,6 @@ export default class Node {
 
         if(this.idle) {
             return "idle";
-        }
-
-        if(this.offline) {
-            return "offline";
         }
 
         return "unknown";
