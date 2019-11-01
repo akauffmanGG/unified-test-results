@@ -1,5 +1,4 @@
 import JenkinsTestCase from '@service/jenkins/jenkins-test-case';
-import JenkinsJobEnum from '@service/jenkins/jenkins-job-enum';
 
 import { JiraIssue } from '@service/jira/jira-issue';
 
@@ -23,11 +22,16 @@ export default class TestCaseResult {
     isCreatingJiraIssue: boolean;
 
     get displayName(): string {
-        return this.suite + ' ' + this.case;
+        if(this.suite) {
+            return this.suite + ' ' + this.case;
+        }
+
+        return this.case;
+        
     }
 
     get caseNumber(): string {
-        return this.case.substring(2);
+        return (this.case && this.case.length > 2) ? this.case.substring(2) : '';
     }
 
     get isConsistentlyFailing(): boolean {
@@ -36,6 +40,20 @@ export default class TestCaseResult {
 
     get needsJiraIssue(): boolean {
         return !this.jiraIssue && this.isConsistentlyFailing && !this.isCreatingJiraIssue;
+    }
+
+    get tcdbUrl(): string {
+        if(this.isTcdb) {
+            return 'http://tcdb.inin.com/phaster/#/testcases/' + this.caseNumber;
+        }
+    }
+
+    get isTcdb(): boolean {
+        return this.case && this.case.toLowerCase().startsWith('tc');
+    }
+
+    get isIcws(): boolean {
+        return this.case && this.case.toLowerCase().startsWith('icws');
     }
 
     constructor(testCase: JenkinsTestCase) {

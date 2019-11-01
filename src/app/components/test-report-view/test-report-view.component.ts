@@ -5,11 +5,10 @@ import { JiraService } from '@service/jira/jira.service';
 import { TcdbService } from '@service/tcdb/tcdb.service';
 
 import JenkinsTestReport from '@service/jenkins/jenkins-test-report';
-import JenkinsJobEnum from '@service/jenkins/jenkins-job-enum';
 import { JenkinsJob } from '@service/jenkins/jenkins-job';
 import { JenkinsBuild } from '@service/jenkins/jenkins-build';
 
-import { JiraQuery } from '@service/jira/jira-query';
+import { JiraQuery } from '@service/jira/jira-query'; 
 import { JiraIssue } from '@service/jira/jira-issue';
 
 import TestCaseResult from './test-case-result';
@@ -17,7 +16,6 @@ import { TestReport } from './test-report';
 import teamSuiteMap from './team-suite-map';
 import { MissingTeam } from './team';
 import { TestCaseJobResult } from './test-case-job-result';
-import { promise } from 'protractor';
 
 
 
@@ -32,8 +30,8 @@ export class TestReportViewComponent implements OnInit {
     testCaseResults: TestCaseResult[];
     testReport: TestReport = new TestReport();
     loading: boolean = false;
-    selectedJob = "client.test.latest_systest";
-    icatJobs: string[] = [];
+    selectedJob: JenkinsJob;
+    icatJobs: JenkinsJob[] = [];
     isFilterCollapsed = false;
     isNodeStatusCollapsed = true;
 
@@ -41,8 +39,10 @@ export class TestReportViewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.jenkinsService.getIcatJobs().then((jobs:string[]) => {
+        this.jenkinsService.getIcatJobs().then((jobs:JenkinsJob[]) => {
             this.icatJobs = jobs;
+
+            this.selectedJob = _.find(jobs, ['name', 'client.test.latest_systest']);
         });
     }
 
@@ -57,7 +57,7 @@ export class TestReportViewComponent implements OnInit {
             this.addTeamsToResults();
             this.testReport.displayedRows = this.testCaseResults;
 
-            let cases: String[] = _.map(this.testCaseResults, 'caseNumber');
+            let cases: String[] = _.uniq(_.map(_.filter(this.testCaseResults, 'isTcdb'), 'caseNumber'));
 
             let promises : Promise<any>[] = [
                 this.addJiraIssues(),
@@ -149,8 +149,10 @@ export class TestReportViewComponent implements OnInit {
         this.testReport.successTrend = 0;
         this.testReport.failTrend = 0;
 
-        return this.jenkinsService.getJenkinsJob(this.selectedJob)
-        .then((job: JenkinsJob) => {
+        let job = this.selectedJob;
+
+        return this.jenkinsService.setJenkinsJobBuildInfo(job)
+        .then(() => {
             this.testReport.successTrend = job.lastCompletedBuild.number - (job.lastUnsuccessfulBuild ? job.lastUnsuccessfulBuild.number : 0);
             this.testReport.failTrend = job.lastCompletedBuild.number - job.lastSuccessfulBuild.number;
             return this.jenkinsService.getJenkinsBuild(this.selectedJob, job.lastSuccessfulBuild.number);

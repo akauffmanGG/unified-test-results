@@ -1,5 +1,4 @@
 import TestCaseResult from './test-case-result';
-import JenkinsTestReport from '@service/jenkins/jenkins-test-report';
 
 import * as moment from 'moment';
 
@@ -14,11 +13,6 @@ export class TestReport {
     buildNumber: number;
 
     get displayTrend(): string {
-        /*if(this.successTrend) {
-            return 'Successful ' + this.successTrend + ' times';
-        } else if (this.failTrend) {
-            return 'Failed ' + this.failTrend + ' times';
-        }*/
 
         return this.successTrend ? this.successTrend.toString() : this.failTrend.toString();
     }

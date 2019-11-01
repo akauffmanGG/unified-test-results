@@ -1,6 +1,7 @@
 export default class JenkinsTestCase {
     private static readonly TEST_CASE_REGEX = new RegExp('TC\\d{5}', 'i');
     private static readonly TEST_SUITE_REGEX = new RegExp('TS\\d{4}', 'i');
+    private static readonly ICWS_CASE_REGEX = new RegExp('icws-\\d{4,6}', 'i');
 
     age: number;
     className: string;
@@ -23,6 +24,11 @@ export default class JenkinsTestCase {
 
         let anyName = this.className + this.name;
         let match = JenkinsTestCase.TEST_CASE_REGEX.exec(anyName);
+        if(match) {
+            this.case = match[0];
+        }
+
+        match = JenkinsTestCase.ICWS_CASE_REGEX.exec(anyName);
         if(match) {
             this.case = match[0];
         }

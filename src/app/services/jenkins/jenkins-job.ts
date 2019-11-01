@@ -1,7 +1,22 @@
 import { JenkinsBuild } from './jenkins-build';
 import * as _ from 'lodash';
 
+enum JOB_TYPE {
+    WEB = 'WEB',
+    ICWS = 'ICWS'
+}
+
 export class JenkinsJob {
+    name: string;
+    color: string;
+    url: string;
+
+    private _type: JOB_TYPE;
+
+    get type() {
+        return this._type;
+    }
+
     lastBuild: JenkinsBuild;
     lastCompletedBuild: JenkinsBuild;
     lastFailedBuild: JenkinsBuild;
@@ -12,34 +27,44 @@ export class JenkinsJob {
     builds: JenkinsBuild[];
 
     constructor(obj: any) {
-        if(obj.lastBuild) {
-            this.lastBuild = new JenkinsBuild(obj.lastBuild);
+        this.name = obj.name;
+
+        this.color = obj.color;
+
+        this.url = obj.url;
+
+        this._type = this.url.includes('icws') ? JOB_TYPE.ICWS : JOB_TYPE.WEB;
+    }
+
+    setBuildInfo(buildInfo: any) {
+        if(buildInfo.lastBuild) {
+            this.lastBuild = new JenkinsBuild(buildInfo.lastBuild);
         }
 
-        if(obj.lastCompletedBuild) {
-            this.lastCompletedBuild = new JenkinsBuild(obj.lastCompletedBuild);
+        if(buildInfo.lastCompletedBuild) {
+            this.lastCompletedBuild = new JenkinsBuild(buildInfo.lastCompletedBuild);
         }
 
-        if(obj.lastFailedBuild) {
-            this.lastFailedBuild = new JenkinsBuild(obj.lastFailedBuild);
+        if(buildInfo.lastFailedBuild) {
+            this.lastFailedBuild = new JenkinsBuild(buildInfo.lastFailedBuild);
         }
 
-        if(obj.lastStableBuild) {
-            this.lastStableBuild = new JenkinsBuild(obj.lastStableBuild);
+        if(buildInfo.lastStableBuild) {
+            this.lastStableBuild = new JenkinsBuild(buildInfo.lastStableBuild);
         }
 
-        if(obj.lastSuccessfulBuild) {
-            this.lastSuccessfulBuild = new JenkinsBuild(obj.lastSuccessfulBuild);
+        if(buildInfo.lastSuccessfulBuild) {
+            this.lastSuccessfulBuild = new JenkinsBuild(buildInfo.lastSuccessfulBuild);
         }
 
-        if(obj.lastUnstableBuild) {
-            this.lastUnstableBuild = new JenkinsBuild(obj.lastUnstableBuild);
+        if(buildInfo.lastUnstableBuild) {
+            this.lastUnstableBuild = new JenkinsBuild(buildInfo.lastUnstableBuild);
         }
 
-        if(obj.lastUnsuccessfulBuild) {
-            this.lastUnsuccessfulBuild = new JenkinsBuild(obj.lastUnsuccessfulBuild);
+        if(buildInfo.lastUnsuccessfulBuild) {
+            this.lastUnsuccessfulBuild = new JenkinsBuild(buildInfo.lastUnsuccessfulBuild);
         }
 
-        this.builds = _.map(obj.builds, _build => new JenkinsBuild(_build));
+        this.builds = _.map(buildInfo.builds, _build => new JenkinsBuild(_build));
     }
 }

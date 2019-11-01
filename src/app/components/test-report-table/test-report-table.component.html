@@ -22,7 +22,8 @@
 
         <ngx-datatable-column name="Test Case" prop="displayName" [flexGrow]="3">
             <ng-template let-row="row" let-value="value" let-expanded="expanded" ngx-datatable-cell-template>
-                <a href="http://tcdb.inin.com/phaster/#/testcases/{{row.caseNumber}}" target="_blank">{{value}}</a>
+                <a *ngIf="row.tcdbUrl" href="{{row.tcdbUrl}}" target="_blank">{{value}}</a>
+                <span *ngIf="!row.tcdbUrl">{{value}}</span>
              </ng-template>
         </ngx-datatable-column>
 

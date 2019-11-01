@@ -103,6 +103,10 @@ export class TestReportFilterComponent implements OnInit {
             return true;
         }
 
+        if(!result.displayName) {
+            return false;
+        }
+
         return result.displayName.toLowerCase().includes(this.findTestCase.toLowerCase());
     }
 
@@ -119,6 +123,10 @@ export class TestReportFilterComponent implements OnInit {
     }
 
     private isFilteredToPriority(result: TestCaseResult): boolean {
+        if(this.selectedPriorities.length === 4){
+            return true;
+        }
+
         if(_.indexOf(this.selectedPriorities, result.priority) > -1) {
             return true;
         }
