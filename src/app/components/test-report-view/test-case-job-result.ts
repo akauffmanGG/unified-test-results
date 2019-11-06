@@ -39,6 +39,32 @@ export class TestCaseJobResult {
         }
     }
 
+    // TCDB reports each step of a test individually. We need to merge those results together
+    // under a single test case. If any step of the test fails, we should consider the whole test a failure.
+    merge(other: TestCaseJobResult) : void {
+        if(this.suite !== other.suite || this.case !== other.case) {
+            throw new Error('Results cannot be merged');
+        }
+
+        if(other.isFailure) {
+            this.status = 'FAILED';
+
+            if(this.errorMessage != other.errorMessage) {
+                this.errorMessage += (' ' + other.errorMessage);
+            }
+            
+            if(other.age > this.age){
+                this.age = other.age;
+            }
+
+            if(this.failedSince === 0 || other.failedSince < this.failedSince) {
+                this.failedSince = other.failedSince;
+            }
+
+            //TODO: How to merge recording link?
+        }
+    }
+
     private getErrorDetailsMessage(errorDetails: string): string {
         if(!errorDetails || errorDetails.length === 0) {
             return;
