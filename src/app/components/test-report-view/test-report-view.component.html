@@ -20,7 +20,7 @@
             </form>
             
 
-            <div *ngIf="testCaseResults && testCaseResults.length && !loading">
+            <div *ngIf="testReport && !loading">
 
                     <a class="collapse-title"
                     (click)="isFilterCollapsed = !isFilterCollapsed" 
@@ -35,7 +35,7 @@
                 <div id="filterCard" class="filter-card" [ngbCollapse]="isFilterCollapsed">
                     <div class="card">
                         <div class="card-body">
-                                <test-report-filter [testReport] = "testReport" [testResults] = "testCaseResults"></test-report-filter>
+                                <test-report-filter [testReport] = "testReport"></test-report-filter>
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
             
         </div>
         <div class="col-lg-8 main">
-            <p *ngIf="testCaseResults && testCaseResults.length && !loading">
+            <p *ngIf="testReport && !loading">
               <test-report-table [testReport] = "testReport"></test-report-table>
             </p>
         </div>

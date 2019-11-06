@@ -50,7 +50,12 @@ export class TestCaseJobResult {
             this.status = 'FAILED';
 
             if(this.errorMessage != other.errorMessage) {
-                this.errorMessage += (' ' + other.errorMessage);
+                if(this.errorMessage) {
+                    this.errorMessage += (' ' + other.errorMessage);
+                } else {
+                    this.errorMessage = other.errorMessage;
+                }
+                
             }
             
             if(other.age > this.age){

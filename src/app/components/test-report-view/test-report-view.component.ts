@@ -27,8 +27,7 @@ import { TestCaseJobResult } from './test-case-job-result';
 })
 export class TestReportViewComponent implements OnInit {
 
-    testCaseResults: TestCaseResult[];
-    testReport: TestReport = new TestReport();
+    testReport: TestReport;
     loading: boolean = false;
     selectedJob: JenkinsJob;
     icatJobs: JenkinsJob[] = [];
@@ -49,17 +48,13 @@ export class TestReportViewComponent implements OnInit {
     getTestReport(): void {
         this.loading = true;
 
-        this.jenkinsService.getLatestTestReport(this.selectedJob).then(testReport => {
-            this.testReport.reportUrl = testReport.url;
-            let testReportResults: TestCaseResult[] = _.map(testReport.testCases, testCase => new TestCaseResult(testCase));
-            this.testCaseResults = this.mergeResults(testReportResults);
-            return this.testCaseResults;
+        this.jenkinsService.getLatestTestReport(this.selectedJob).then(jenkinsTestReport => {
+            this.testReport = new TestReport(jenkinsTestReport);
         }).then(() => {
             this.addTeamsToResults();
-            this.testReport.displayedRows = this.testCaseResults;
 
             // Unique list of TCDB test cases
-            let cases: String[] = _.uniq(_.map(_.filter(this.testCaseResults, 'isTcdb'), 'caseNumber'));
+            let cases: String[] = _.uniq(_.map(_.filter(this.testReport.testCaseResults, 'isTcdb'), 'caseNumber'));
 
             let promises : Promise<any>[] = [
                 this.addJiraIssues(),
@@ -73,7 +68,9 @@ export class TestReportViewComponent implements OnInit {
 
                 this.jenkinsService.getHistoricalReports(this.selectedJob)
                 .then(results => {
-                    this.addHistory(_.map(results, 'report'));
+                    this.addHistory(_.map(results, result => {
+                        return new TestReport(result.report);
+                    }));
                 })
             ];
 
@@ -86,22 +83,11 @@ export class TestReportViewComponent implements OnInit {
         
     }
 
-    //ICWS Tests can report multiple results for a single test case. Merge them into a single record.
-    private mergeResults(results: TestCaseResult[]): TestCaseResult[] {
-        let resultsMap = _.keyBy(results, (result: TestCaseResult) => result.displayName);
-
-        _.forEach(results, (result: TestCaseResult) => {
-            resultsMap[result.displayName].jobResult.merge(result.jobResult);
-        });
-
-        return _.values(resultsMap);
-    }
-
     private addJiraIssues(): Promise<any> {
         return this.jiraService.getFailureIssues()
         .then((query: JiraQuery) => {
             let issueMap = this.mapJiraIssueToTestCase(query.issues);
-            _.forEach(this.testCaseResults, result => {
+            _.forEach(this.testReport.testCaseResults, result => {
                 if(issueMap[result.case]) {
                     result.jiraIssue = issueMap[result.case];
                 }
@@ -120,15 +106,14 @@ export class TestReportViewComponent implements OnInit {
         return issueMap;
     }
 
-    private addHistory(historicalResults: JenkinsTestReport[]): void {
+    private addHistory(historicalResults: TestReport[]): void {
         // Create list of maps of class name to result
-        let resultsMapList = _.map(historicalResults, (testReport:JenkinsTestReport) => {
-            let testReportResults: TestCaseResult[] = this.mergeResults(_.map(testReport.testCases, testCase => new TestCaseResult(testCase)));
-            return _.keyBy(testReportResults, (result: TestCaseResult) => result.displayName);
+        let resultsMapList = _.map(historicalResults, (testReport:TestReport) => {
+            return _.keyBy(testReport.testCaseResults, (result: TestCaseResult) => result.displayName);
         });
 
         //iterate through testCaseResults
-        _.map(this.testCaseResults, (testCaseResult: TestCaseResult) => {
+        _.map(this.testReport.testCaseResults, (testCaseResult: TestCaseResult) => {
             _.map(resultsMapList, (resultMap:any) => {
                 let key = testCaseResult.displayName;
 
@@ -144,7 +129,7 @@ export class TestReportViewComponent implements OnInit {
     private addPriorities(priorities: [{ TestCaseId : String, Priority : String }] ) : void {
         let priorityMap = _.keyBy( priorities, 'TestCaseId');
 
-        this.testCaseResults.forEach( (testCaseResult: TestCaseResult) => {
+        this.testReport.testCaseResults.forEach( (testCaseResult: TestCaseResult) => {
             let priorityRecord = priorityMap[testCaseResult.caseNumber];
 
             if(priorityRecord) {
@@ -154,7 +139,7 @@ export class TestReportViewComponent implements OnInit {
     }
 
     private addTeamsToResults(): void {
-        _.each(this.testCaseResults, (testCaseResult: TestCaseResult) => {
+        _.each(this.testReport.testCaseResults, (testCaseResult: TestCaseResult) => {
             testCaseResult.team = teamSuiteMap.get(testCaseResult.suite) || MissingTeam;
         });
     }

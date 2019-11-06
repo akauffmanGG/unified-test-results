@@ -13,8 +13,6 @@ import { TestCaseJobResult } from '../test-report-view/test-case-job-result';
 export class TestReportFilterComponent implements OnInit {
     @Input()
     testReport: TestReport;
-    @Input()
-    testResults: TestCaseResult[];
 
     selectedStatus: string = 'ALL';
     teams: Team[] = Teams;
@@ -39,7 +37,7 @@ export class TestReportFilterComponent implements OnInit {
     }
 
     filterRows(): void {
-        this.testReport.displayedRows = _.filter(this.testResults, (result: TestCaseResult) => {
+        this.testReport.displayedRows = _.filter(this.testReport.testCaseResults, (result: TestCaseResult) => {
             return this.isFilteredToQaStatus(result) &&
                 this.isFilteredToTeam(result) &&
                 this.isFilteredToScr(result) &&
