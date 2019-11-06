@@ -8,6 +8,7 @@ enum JOB_TYPE {
 
 export class JenkinsJob {
     name: string;
+    _displayName: string;
     color: string;
     url: string;
 
@@ -26,6 +27,10 @@ export class JenkinsJob {
     lastUnsuccessfulBuild: JenkinsBuild;
     builds: JenkinsBuild[];
 
+    get displayName(): string {
+        return this._displayName;
+    }
+
     constructor(obj: any) {
         this.name = obj.name;
 
@@ -34,6 +39,11 @@ export class JenkinsJob {
         this.url = obj.url;
 
         this._type = this.url.includes('icws') ? JOB_TYPE.ICWS : JOB_TYPE.WEB;
+
+        this._displayName = this.name.replace('client.test.', '');
+
+        this._displayName = this._type === 'WEB' ? ('WEB - ' + this._displayName) : ('ICWS - ' + this._displayName);
+
     }
 
     setBuildInfo(buildInfo: any) {
