@@ -13,9 +13,9 @@ export class TestReportFilterComponent implements OnInit {
     @Input()
     testReport: TestReport;
 
-    selectedStatus: string = 'ALL';
+    selectedStatuses: { failed:  boolean, passed: boolean } = {failed: false, passed: false};
     selectedScr: string = 'ALL';
-    selectedPriorities: string[] = ['P1', 'P2', 'P3', 'P4'];
+    selectedPriorities: { P1: boolean, P2: boolean, P3: boolean, P4: boolean } = { P1: false, P2: false, P3: false, P4: false };
     findScr: string;
     findTestCase: string;
     findErrorMessage: string;
@@ -35,7 +35,7 @@ export class TestReportFilterComponent implements OnInit {
 
     filterRows(): void {
         this.testReport.displayedRows = _.filter(this.testReport.testCaseResults, (result: TestCaseResult) => {
-            return this.isFilteredToQaStatus(result) &&
+            return this.isFilteredToStatus(result) &&
                 this.isFilteredToScr(result) &&
                 this.isSearchedScr(result) &&
                 this.isSearchedTestCase(result) &&
@@ -44,21 +44,15 @@ export class TestReportFilterComponent implements OnInit {
         });
     }
 
-    private isFilteredToQaStatus(result: TestCaseResult): boolean {
-        if(this.selectedStatus === 'ALL') {
+    private isFilteredToStatus(result: TestCaseResult): boolean {
+        if(!this.selectedStatuses.failed && !this.selectedStatuses.passed){
             return true;
         }
 
-        if(this.selectedStatus === 'NONE') {
-            return false;
-        }
-
-        if(this.selectedStatus === 'FAILED') {
-            return result.jobResult.isFailure;
-        }
-
-        if(this.selectedStatus === 'PASSED') {
-            return !result.jobResult.isFailure;
+        if(result.jobResult.isFailure) {
+            return this.selectedStatuses.failed;
+        } else {
+            return this.selectedStatuses.passed;
         }
     }
 
@@ -113,24 +107,28 @@ export class TestReportFilterComponent implements OnInit {
     }
 
     private isFilteredToPriority(result: TestCaseResult): boolean {
-        if(this.selectedPriorities.length === 4){
+        if(!this.selectedPriorities.P1 &&
+            !this.selectedPriorities.P2 &&
+            !this.selectedPriorities.P3 &&
+            !this.selectedPriorities.P4) {
+
             return true;
         }
 
-        if(_.indexOf(this.selectedPriorities, result.priority) > -1) {
-            return true;
+        if(!result.priority) {
+            return false;
         }
 
-        return false;
+        return this.selectedPriorities[result.priority];
     }
 
     clearFilters(): void {
-        this.selectedStatus = 'ALL';
+        this.selectedStatuses = {failed: false, passed: false};
         this.selectedScr = 'ALL';
         this.findScr = '';
         this.findTestCase = '';
         this.findErrorMessage = '';
-        this.selectedPriorities = ['P1', 'P2', 'P3', 'P4'];
+        this.selectedPriorities = { P1: false, P2: false, P3: false, P4: false };
 
         this.filterRows();
     }

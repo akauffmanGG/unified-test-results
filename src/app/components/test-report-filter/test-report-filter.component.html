@@ -5,33 +5,45 @@
         <input id="findTestCase" name="findTestCase" [(ngModel)]="findTestCase" class="form-control form-control-sm" type="text" placeholder="Find Test Case" (keyup)="filterRows()">
     </div>
 
-    <div class="form-group">
-        <label for="prioritySelect">Priority</label>
-        <select class="form-control" multiple name="prioritySelect" id="prioritySelect" (change)="filterRows()" [(ngModel)]="selectedPriorities">
-            <option value="P1">P1</option>
-            <option value="P2">P2</option>
-            <option value="P3">P3</option>
-            <option value="P4">P4</option>
-        </select>
-    </div>
+    <label>Priority</label>
+    <fieldset class="form-group">
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="prioritySelect" id="p1" value="P1" (change)="filterRows()" [(ngModel)]="selectedPriorities.P1">
+                    P1
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="prioritySelect" id="p2" value="P2" (change)="filterRows()" [(ngModel)]="selectedPriorities.P2">
+                    P2
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="prioritySelect" id="p3" value="P3" (change)="filterRows()" [(ngModel)]="selectedPriorities.P3">
+                    P3
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="prioritySelect" id="p4" value="P4" (change)="filterRows()" [(ngModel)]="selectedPriorities.P4">
+                    P4
+            </label>
+        </div>
+    </fieldset>
 
     <label>Status</label>
     <fieldset class="form-group">
         <div class="form-check form-check-inline">
             <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="statusSelect" id="statusAll" value="ALL" selected (change)="filterRows()" [(ngModel)]="selectedStatus">
-                    All
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="statusSelect" id="statusFailed" value="FAILED" (change)="filterRows()" [(ngModel)]="selectedStatus">
+                    <input type="checkbox" class="form-check-input" name="statusSelect" id="statusFailed" value="FAILED" (change)="filterRows()" [(ngModel)]="selectedStatuses.failed">
                     Failed
             </label>
         </div>
         <div class="form-check form-check-inline">
             <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="statusSelect" id="statusPassed" value="PASSED" (change)="filterRows()" [(ngModel)]="selectedStatus">
+                    <input type="checkbox" class="form-check-input" name="statusSelect" id="statusPassed" value="PASSED" (change)="filterRows()" [(ngModel)]="selectedStatuses.passed">
                     Passed
             </label>
         </div>
