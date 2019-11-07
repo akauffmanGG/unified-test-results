@@ -1,10 +1,9 @@
 import _ from 'lodash';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { JenkinsService } from '@service/jenkins/jenkins.service';
 import { JiraService } from '@service/jira/jira.service';
 import { TcdbService } from '@service/tcdb/tcdb.service';
 
-import JenkinsTestReport from '@service/jenkins/jenkins-test-report';
 import { JenkinsJob } from '@service/jenkins/jenkins-job';
 import { JenkinsBuild } from '@service/jenkins/jenkins-build';
 
@@ -15,8 +14,8 @@ import TestCaseResult from './test-case-result';
 import { TestReport } from './test-report';
 import teamSuiteMap from './team-suite-map';
 import { MissingTeam } from './team';
-import { TestCaseJobResult } from './test-case-job-result';
 
+import { NodeStatusComponent } from '../node-status/node-status.component';
 
 
 @Component({
@@ -26,6 +25,7 @@ import { TestCaseJobResult } from './test-case-job-result';
     providers: [JenkinsService, JiraService, TcdbService]
 })
 export class TestReportViewComponent implements OnInit {
+    @ViewChild(NodeStatusComponent, { static: false }) nodeStatus:NodeStatusComponent;
 
     testReport: TestReport;
     loading: boolean = false;
@@ -48,6 +48,8 @@ export class TestReportViewComponent implements OnInit {
     getTestReport(): void {
         this.loading = true;
 
+        this.nodeStatus.updateIcatNodes();
+
         this.jenkinsService.getLatestTestReport(this.selectedJob).then(jenkinsTestReport => {
             this.testReport = new TestReport(jenkinsTestReport);
         }).then(() => {
@@ -57,6 +59,7 @@ export class TestReportViewComponent implements OnInit {
             let cases: String[] = _.uniq(_.map(_.filter(this.testReport.testCaseResults, 'isTcdb'), 'caseNumber'));
 
             let promises : Promise<any>[] = [
+
                 this.addJiraIssues(),
 
                 this.setJobTrends(),
