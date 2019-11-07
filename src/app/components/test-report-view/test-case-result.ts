@@ -4,6 +4,7 @@ import { JiraIssue } from '@service/jira/jira-issue';
 
 import { Team, MissingTeam } from './team';
 import { TestCaseJobResult } from './test-case-job-result';
+import { deprecate } from 'util';
 
 const FAILED = 'FAILED';
 const REGRESSION = 'REGRESSION';
@@ -13,7 +14,6 @@ export default class TestCaseResult {
     name: string;
     suite: string;
     case: string;
-    team: Team;
     priority: string;
     jobResult: TestCaseJobResult;
     history: TestCaseJobResult[] = [];
@@ -66,8 +66,6 @@ export default class TestCaseResult {
         this.case = testCase.case;
 
         this.jobResult = new TestCaseJobResult(testCase);
-
-        this.team = MissingTeam;
     }
 
     addHistory(result: TestCaseJobResult) {

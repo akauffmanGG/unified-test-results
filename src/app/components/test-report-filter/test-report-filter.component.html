@@ -38,13 +38,6 @@
     </fieldset>
 
     <div class="form-group">
-        <label for="teamSelect">Team</label>
-        <select class="form-control" multiple name="teamSelect" id="teamSelect" (change)="filterRows()" [(ngModel)]="selectedTeams">
-            <option *ngFor="let team of teams" [ngValue]="team">{{team.displayName}}</option>
-        </select>
-    </div>
-
-    <div class="form-group">
         <label for="findScr">SCR</label>
         <input [(ngModel)]="findScr" class="form-control form-control-sm" type="text" placeholder="Find SCR" name="findScr" id="findScr" (keyup)="scrSearch()">
     </div>

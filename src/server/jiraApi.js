@@ -53,11 +53,10 @@ router.post('/issue', (req, res, next) => {
     console.info('Creating new issue');
 
     let description = req.query.description;
-    let teamLabel = req.query.teamLabel;
     let testCase = req.query.testCase;
 
     let newIssueKey = '';
-    axios.post(ISSUE_URL, createIssueObj(description, teamLabel), config)
+    axios.post(ISSUE_URL, createIssueObj(description), config)
         .then(result => {
             newIssueKey = result.data.key;
             console.log('Issue ' + newIssueKey + ' created successfully');
@@ -86,7 +85,7 @@ function createEditObj(testCase) {
     }
 }
 
-function createIssueObj(description, teamLabel) {
+function createIssueObj(description) {
 
     return {
         fields: {
@@ -114,9 +113,7 @@ function createIssueObj(description, teamLabel) {
             //Found in Branch
             customfield_11990: {
                 value: "Systest"
-            },
-            //Development labels
-            customfield_10350: [teamLabel]
+            }
         }
     }
 }

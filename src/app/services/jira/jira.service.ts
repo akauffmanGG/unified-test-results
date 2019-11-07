@@ -25,8 +25,7 @@ export class JiraService {
 
     postNewIssue(testCaseResult: TestCaseResult): Promise<JiraIssue> { 
         let params = new HttpParams().set('description', this.createDescription(testCaseResult))
-            .set('testCase', testCaseResult.case)
-            .set('teamLabel', testCaseResult.team.developmentLabel);
+            .set('testCase', testCaseResult.case);
 
         return this.http.post('api/jira/issue', {}, {
             params

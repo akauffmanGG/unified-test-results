@@ -102,10 +102,4 @@ export class TestReportTableComponent implements OnInit {
             .catch(() => { row.isCreatingJiraIssue = false; });
     }
 
-    onActivate(event) {
-        if(event.type === 'click' && event.value === 'FAILED') {
-            this.table.rowDetail.toggleExpandRow(event.row);
-        }
-
-    }
 }

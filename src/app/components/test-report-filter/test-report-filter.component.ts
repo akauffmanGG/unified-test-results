@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { Component, OnInit, Input } from '@angular/core';
 import { TestReport } from '../test-report-view/test-report';
 import TestCaseResult from '../test-report-view/test-case-result';
-import { Team, Teams } from '../test-report-view/team';
 import { TestCaseJobResult } from '../test-report-view/test-case-job-result';
 
 @Component({
@@ -15,8 +14,6 @@ export class TestReportFilterComponent implements OnInit {
     testReport: TestReport;
 
     selectedStatus: string = 'ALL';
-    teams: Team[] = Teams;
-    selectedTeams: Team[] = Teams;
     selectedScr: string = 'ALL';
     selectedPriorities: string[] = ['P1', 'P2', 'P3', 'P4'];
     findScr: string;
@@ -39,7 +36,6 @@ export class TestReportFilterComponent implements OnInit {
     filterRows(): void {
         this.testReport.displayedRows = _.filter(this.testReport.testCaseResults, (result: TestCaseResult) => {
             return this.isFilteredToQaStatus(result) &&
-                this.isFilteredToTeam(result) &&
                 this.isFilteredToScr(result) &&
                 this.isSearchedScr(result) &&
                 this.isSearchedTestCase(result) &&
@@ -64,10 +60,6 @@ export class TestReportFilterComponent implements OnInit {
         if(this.selectedStatus === 'PASSED') {
             return !result.jobResult.isFailure;
         }
-    }
-
-    private isFilteredToTeam(result: TestCaseResult): boolean {
-        return this.selectedTeams.includes(result.team);
     }
 
     private isFilteredToScr(result: TestCaseResult): boolean {
@@ -134,7 +126,6 @@ export class TestReportFilterComponent implements OnInit {
 
     clearFilters(): void {
         this.selectedStatus = 'ALL';
-        this.selectedTeams = this.teams;
         this.selectedScr = 'ALL';
         this.findScr = '';
         this.findTestCase = '';

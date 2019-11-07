@@ -12,8 +12,6 @@ import { JiraIssue } from '@service/jira/jira-issue';
 
 import TestCaseResult from './test-case-result';
 import { TestReport } from './test-report';
-import teamSuiteMap from './team-suite-map';
-import { MissingTeam } from './team';
 
 import { NodeStatusComponent } from '../node-status/node-status.component';
 
@@ -53,8 +51,6 @@ export class TestReportViewComponent implements OnInit {
         this.jenkinsService.getLatestTestReport(this.selectedJob).then(jenkinsTestReport => {
             this.testReport = new TestReport(jenkinsTestReport);
         }).then(() => {
-            this.addTeamsToResults();
-
             // Unique list of TCDB test cases
             let cases: String[] = _.uniq(_.map(_.filter(this.testReport.testCaseResults, 'isTcdb'), 'caseNumber'));
 
@@ -138,12 +134,6 @@ export class TestReportViewComponent implements OnInit {
             if(priorityRecord) {
                 testCaseResult.priority = priorityRecord.Priority;
             }
-        });
-    }
-
-    private addTeamsToResults(): void {
-        _.each(this.testReport.testCaseResults, (testCaseResult: TestCaseResult) => {
-            testCaseResult.team = teamSuiteMap.get(testCaseResult.suite) || MissingTeam;
         });
     }
 
