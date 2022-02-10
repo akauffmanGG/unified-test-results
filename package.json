@@ -35,7 +35,7 @@
     "moment": "^2.24.0",
     "mssql": "^5.1.0",
     "ngx-loading": "^1.0.15",
-    "node-sass": "^4.9.4",
+    "node-sass": "^7.0.0",
     "popper.js": "^1.14.4",
     "rxjs": "^6.5.2",
     "rxjs-compat": "^6.0.0-rc.0",
